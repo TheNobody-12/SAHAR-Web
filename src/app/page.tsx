@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Calendar, HeartHandshake, Users, Globe2, Sparkles, Mail, ArrowRight, PlayCircle } from "lucide-react";
+import { Calendar, HeartHandshake, Users, Globe2, ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
+import NewsletterForm from "@/components/newsletter-form";
 
 // Single-file preview component for a modern, non-profit style landing page.
 // Tailwind + shadcn/ui + framer-motion. Drop into a React app.
@@ -65,6 +66,17 @@ export default function SahahrLanding() {
               priority
             />
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter (below hero) */}
+      <section className="py-10 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-6 items-center">
+          <div>
+            <h3 className="text-2xl md:text-3xl font-bold">Stay in the loop</h3>
+            <p className="mt-2 text-gray-600">Get updates on events, programs, and volunteer opportunities.</p>
+          </div>
+          <NewsletterForm />
         </div>
       </section>
 
@@ -148,19 +160,11 @@ export default function SahahrLanding() {
         </div>
       </section>
 
-      {/* Newsletter section; global footer is added in RootLayout */}
+      {/* Contact anchor for links; subscribe form lives in footer */}
       <section id="contact" className="py-16 bg-gray-900 text-white">
-        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h3 className="text-3xl font-bold">Stay in the loop</h3>
-            <p className="mt-2 text-gray-300">Get updates on events, programs, and volunteer opportunities.</p>
-          </div>
-          <form className="flex gap-3">
-            <Input type="email" placeholder="Your email" className="bg-white text-gray-900" />
-            <Button className="gap-2 bg-amber-400 text-black hover:bg-amber-500">
-              <Mail className="h-4 w-4"/> Subscribe
-            </Button>
-          </form>
+        <div className="max-w-7xl mx-auto px-4">
+          <h3 className="text-3xl font-bold">Get in touch</h3>
+          <p className="mt-2 text-gray-300">Questions about programs or partnerships? Reach out and we’ll respond soon.</p>
         </div>
       </section>
     </div>
