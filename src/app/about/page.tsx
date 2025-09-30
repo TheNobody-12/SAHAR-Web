@@ -7,6 +7,9 @@ import {
   CardTitle as UICardTitle,
 } from "@/components/ui/card";
 import Carousel from "@/components/carousel";
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 const BOARD = [
   { name: "Asha Patel", title: "President", img: "/images/board1.jpg" },
@@ -18,6 +21,34 @@ const BOARD = [
 export default function AboutPage() {
   return (
     <main className="min-h-screen bg-white">
+      {/* Full‑width hero */}
+      <section className="relative w-full h-[48vh] md:h-[60vh] lg:h-[68vh]">
+        <Image
+          src="/images/event5.jpeg"
+          alt="SAHAHR community gathering"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/10" />
+        <div className="absolute inset-0">
+          <div className="max-w-7xl mx-auto h-full px-4 flex items-end pb-10">
+            <div className="text-white">
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
+                Belonging Through Culture and Community
+              </h1>
+              <p className="mt-3 max-w-2xl text-white/90">
+                We celebrate South Asian heritage and strengthen connections across Hamilton & Region.
+              </p>
+              <div className="mt-6">
+                <Button asChild>
+                  <Link href="#mission">Learn More</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       {/* Slideshow Carousel */}
       <section className="py-8">
         <div className="max-w-7xl mx-auto px-4">

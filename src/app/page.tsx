@@ -28,7 +28,7 @@ export default function SahahrLanding() {
               We unite communities through cultural programs, festivals, and support services for youth, seniors, and newcomers.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Button asChild className="bg-amber-400 text-black hover:bg-amber-500">
+              <Button asChild>
                 <Link href="/events">See Upcoming Events</Link>
               </Button>
               <Button variant="outline" className="gap-2">
@@ -40,36 +40,79 @@ export default function SahahrLanding() {
               <Badge variant="outline">Volunteer‑Led</Badge>
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <Image
-              src="/images/event1.jpeg"
-              alt="Community cultural event"
-              width={800}
-              height={1069}
-              className="rounded-3xl shadow-inner object-cover w-full h-auto"
-              priority
-            />
-            <Image
-              src="/images/event2.jpeg"
-              alt="Cultural performance"
-              width={800}
-              height={1200}
-              className="rounded-3xl shadow-inner object-cover w-full h-auto translate-y-6"
-              priority
-            />
-            <Image
-              src="/images/event3.jpeg"
-              alt="Festival gathering"
-              width={1600}
-              height={1200}
-              className="col-span-2 rounded-3xl shadow-inner object-cover w-full h-auto"
-              priority
-            />
+          <div className="relative">
+            <div className="pointer-events-none absolute -top-6 -left-10 h-40 w-40 rounded-full bg-rose-400/30 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-8 -right-10 h-48 w-48 rounded-full bg-amber-300/30 blur-3xl" />
+
+            <div className="grid grid-cols-2 gap-4">
+              <motion.figure
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
+                className="group relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5"
+              >
+                <Image
+                  src="/images/event1.jpeg"
+                  alt="Community cultural event"
+                  width={800}
+                  height={1069}
+                  className="object-cover w-full h-auto transition-transform duration-500 group-hover:scale-105 group-hover:rotate-[0.6deg]"
+                  priority
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute left-3 bottom-3 inline-flex items-center rounded-full bg-white/85 backdrop-blur px-2.5 py-1 text-[11px] font-medium text-gray-900 shadow">
+                  Festival
+                </div>
+              </motion.figure>
+
+              <motion.figure
+                initial={{ y: 24, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.12 }}
+                className="group relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 translate-y-6"
+              >
+                <Image
+                  src="/images/event2.jpeg"
+                  alt="Cultural performance"
+                  width={800}
+                  height={1200}
+                  className="object-cover w-full h-auto transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-[0.6deg]"
+                  priority
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute left-3 bottom-3 inline-flex items-center rounded-full bg-white/85 backdrop-blur px-2.5 py-1 text-[11px] font-medium text-gray-900 shadow">
+                  Performance
+                </div>
+              </motion.figure>
+
+              <motion.figure
+                initial={{ y: 28, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
+                transition={{ duration: 0.6, ease: "easeOut", delay: 0.18 }}
+                className="group relative col-span-2 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5"
+              >
+                <Image
+                  src="/images/event3.jpeg"
+                  alt="Festival gathering"
+                  width={1600}
+                  height={1200}
+                  className="object-cover w-full h-auto transition-transform duration-700 group-hover:scale-[1.03]"
+                  priority
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-white/85 backdrop-blur px-3 py-1.5 text-xs font-semibold text-gray-900 shadow">
+                  Community Gathering
+                </div>
+              </motion.figure>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Newsletter (below hero) */}
+      {/* Newsletter (below hero)
       <section className="py-10 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-6 items-center">
           <div>
@@ -78,7 +121,7 @@ export default function SahahrLanding() {
           </div>
           <NewsletterForm />
         </div>
-      </section>
+      </section> */}
 
       {/* Programs */}
       <section id="programs" className="py-16 bg-gray-50">
@@ -103,6 +146,43 @@ export default function SahahrLanding() {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Current Programs */}
+      <section id="current-programs" className="py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">Current Programs</h2>
+          <div className="grid gap-6 md:grid-cols-3">
+            {currentPrograms.map((p, i) => (
+              <Card key={i} className="rounded-2xl shadow-sm border-gray-200">
+                <CardHeader>
+                  <CardTitle className="text-xl">{p.title}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-gray-600">
+                  <p>{p.desc}</p>
+                  <Button asChild className="mt-4">
+                    <Link href="/#programs">View Programs</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mid‑page Newsletter CTA */}
+      <section className="bg-rose-600 text-white py-12 px-6">
+        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-6 items-center">
+          <div>
+            <h3 className="text-3xl font-bold">Join our newsletter</h3>
+            <p className="mt-2 text-white/90">Be first to hear about festivals, programs, and volunteer opportunities.</p>
+          </div>
+          <NewsletterForm
+            className="flex flex-col sm:flex-row gap-3"
+            inputClassName="bg-white text-black rounded-xl px-4 py-2 focus-visible:ring-rose-600 border-transparent"
+            buttonClassName="bg-black hover:bg-gray-800 text-white rounded-xl px-6 py-2"
+          />
         </div>
       </section>
 
@@ -175,6 +255,24 @@ const programs = [
   { icon: Globe2, title: "Cultural Celebrations", desc: "Diwali, Eid, Vaisakhi, Nepali New Year, Tamil Heritage Month and more.", cta: "Explore" },
   { icon: Users, title: "Youth & Newcomers", desc: "Mentorship, language & arts workshops, community engagement.", cta: "Learn more" },
   { icon: HeartHandshake, title: "Support & Advocacy", desc: "Mental health resources, seniors services, and social justice initiatives.", cta: "Get support" },
+];
+
+const currentPrograms = [
+  {
+    title: "South Asian Art & Culture",
+    desc:
+      "Workshops and showcases celebrating music, dance, literature, and visual arts across South Asia.",
+  },
+  {
+    title: "Youth & Newcomer Engagement",
+    desc:
+      "Mentorship, language and arts programs, and community events to help youth and newcomers thrive.",
+  },
+  {
+    title: "Community Support & Advocacy",
+    desc:
+      "Resources for seniors and families, mental health awareness, and advocacy with local partners.",
+  },
 ];
 
 const events = [

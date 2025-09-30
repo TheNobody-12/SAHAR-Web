@@ -45,24 +45,26 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* Light theme base */
+  --background: #ffffff;
+  --foreground: #111827; /* gray-900 */
+  --card: #ffffff;
+  --card-foreground: #111827;
+  --popover: #ffffff;
+  --popover-foreground: #111827;
+  /* Brand palette */
+  --primary: #e11d48; /* rose-600 for CTAs */
+  --primary-foreground: #ffffff;
+  --secondary: #f59e0b; /* amber-500 for accents */
+  --secondary-foreground: #111827;
+  --muted: #f3f4f6; /* gray-100 */
+  --muted-foreground: #6b7280; /* gray-500 */
+  --accent: #0ea5e9; /* sky-500 (utility) */
+  --accent-foreground: #0b1221;
+  --destructive: #ef4444; /* red-500 */
+  --border: #e5e7eb; /* gray-200 */
+  --input: #e5e7eb;
+  --ring: #9ca3af; /* gray-400 */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -79,24 +81,24 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  --background: #0b1221; /* near gray-950/navy */
+  --foreground: #f9fafb; /* gray-50 */
+  --card: #111827;
+  --card-foreground: #f9fafb;
+  --popover: #111827;
+  --popover-foreground: #f9fafb;
+  --primary: #fb7185; /* rose-400 in dark for contrast */
+  --primary-foreground: #0b1221;
+  --secondary: #fbbf24; /* amber-400 */
+  --secondary-foreground: #111827;
+  --muted: #1f2937; /* gray-800 */
+  --muted-foreground: #d1d5db; /* gray-300 */
+  --accent: #38bdf8; /* sky-400 */
+  --accent-foreground: #0b1221;
+  --destructive: #f87171;
+  --border: rgb(255 255 255 / 0.1);
+  --input: rgb(255 255 255 / 0.15);
+  --ring: #9ca3af;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -119,4 +121,31 @@
   body {
     @apply bg-background text-foreground;
   }
+  /* Ensure comfortable touch targets */
+  [data-slot="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+  /* Typography scale */
+  h1 {@apply text-4xl md:text-6xl font-extrabold leading-tight;}
+  h2 {@apply text-3xl md:text-4xl font-bold leading-snug;}
+  h3 {@apply text-2xl md:text-3xl font-bold;}
+  h4 {@apply text-xl font-semibold;}
+  h5 {@apply text-lg font-semibold;}
+  h6 {@apply text-base font-semibold;}
+  p  {@apply leading-relaxed;}
+  a  {@apply text-primary hover:underline underline-offset-4;}
 }
+/* Hide Google default UI; we provide our own selector */
+.goog-te-banner-frame.skiptranslate { display: none !important; }
+body { top: 0 !important; }
+.goog-logo-link, .goog-te-gadget { display: none !important; }

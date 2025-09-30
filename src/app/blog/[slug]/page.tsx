@@ -29,7 +29,7 @@ export default function BlogPostPage({ params }: Props) {
         <div className="max-w-3xl mx-auto px-4 space-y-6">
           {post.coverImage && (
             <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100">
-              <Image src={post.coverImage} alt="Cover image" fill className="object-cover" />
+              <Image src={post.coverImage} alt={`Cover image for ${post.title}`} fill className="object-cover" />
             </div>
           )}
           <p className="text-gray-800 leading-relaxed whitespace-pre-line">{post.content}</p>
@@ -47,4 +47,3 @@ function formatDate(iso: string) {
     return iso;
   }
 }
-

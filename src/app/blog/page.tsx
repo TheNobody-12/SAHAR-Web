@@ -64,7 +64,7 @@ export default function BlogIndexPage() {
             <UICard key={p.slug} className="rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
               {p.coverImage ? (
                 <div className="relative h-44 w-full bg-gray-100">
-                  <Image src={p.coverImage} alt="Cover image" fill className="object-cover" />
+                  <Image src={p.coverImage} alt={`Cover image for ${p.title}`} fill className="object-cover" />
                 </div>
               ) : (
                 <div className="h-44 w-full bg-gray-100" />
@@ -102,4 +102,3 @@ function formatDate(iso: string) {
     return iso;
   }
 }
-
