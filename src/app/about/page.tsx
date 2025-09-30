@@ -7,15 +7,20 @@ import {
   CardTitle as UICardTitle,
 } from "@/components/ui/card";
 import Carousel from "@/components/carousel";
+import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
 const BOARD = [
-  { name: "Asha Patel", title: "President", img: "/images/board1.jpg" },
-  { name: "Imran Khan", title: "Vice President", img: "/images/board2.jpg" },
-  { name: "Meera Sharma", title: "Treasurer", img: "/images/board3.jpg" },
-  { name: "Rajiv Menon", title: "Secretary", img: "/images/board4.jpg" },
+  { name: "Member 1", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 2", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 3", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 4", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 5", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 6", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 7", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 8", title: "Board Member", img: "/images/avatar.svg" },
 ];
 
 export default function AboutPage() {
@@ -231,8 +236,13 @@ export default function AboutPage() {
             Board of Directors
           </h2>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {BOARD.map((m) => (
-              <UICard key={m.name} className="rounded-2xl overflow-hidden">
+            {BOARD.slice(0,4).map((m, i) => (
+              <UICard
+                key={m.name}
+                className={`overflow-hidden shadow-sm border-gray-200 transition-all ${
+                  i % 2 ? 'card-swoop-bl' : 'card-swoop-br'
+                } hover:shadow-lg hover:-translate-y-1`}
+              >
                 <div
                   className="h-48 bg-gray-100"
                   style={
@@ -250,6 +260,20 @@ export default function AboutPage() {
                 <UICardContent className="p-5">
                   <div className="font-semibold">{m.name}</div>
                   <div className="text-gray-600 text-sm">{m.title}</div>
+                  <div className="mt-3 flex items-center gap-3 text-gray-500">
+                    <a href="#" aria-label={`${m.name} on Facebook`} className="hover:text-rose-700">
+                      <Facebook className="h-4 w-4" />
+                    </a>
+                    <a href="#" aria-label={`${m.name} on Instagram`} className="hover:text-rose-700">
+                      <Instagram className="h-4 w-4" />
+                    </a>
+                    <a href="#" aria-label={`${m.name} on Twitter`} className="hover:text-rose-700">
+                      <Twitter className="h-4 w-4" />
+                    </a>
+                    <a href="#" aria-label={`${m.name} on LinkedIn`} className="hover:text-rose-700">
+                      <Linkedin className="h-4 w-4" />
+                    </a>
+                  </div>
                 </UICardContent>
               </UICard>
             ))}

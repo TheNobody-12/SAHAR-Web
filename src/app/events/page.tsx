@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 // Alias the UI Card pieces to avoid any duplicate identifier collisions
 import { Card as UICard, CardContent as UICardContent, CardTitle as UICardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Calendar, MapPin, Filter, ArrowRight } from "lucide-react";
 
@@ -61,7 +62,7 @@ const EVENTS: Array<{
     category: "Fundraising",
     location: "SAHAHR Centre",
     blurb: "Raising funds for emergency support and relief.",
-    // no image available in /public/images for this item
+    // image: "/images/event5.jpeg",
     registerUrl: "#",
   },
 ];
@@ -147,16 +148,13 @@ export default function EventsPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filtered.map((e) => (
                 <UICard key={e.id} className="rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
-                  <div
-                    className="h-40 w-full bg-gray-100"
-                    style={
-                      e.image
-                        ? { backgroundImage: `url(${e.image})`, backgroundSize: "cover", backgroundPosition: "center" }
-                        : {}
-                    }
-                    role="img"
-                    aria-label={`${e.title} banner image`}
-                  />
+                  <div className="relative h-40 w-full bg-gray-100">
+                    {e.image ? (
+                      <Image src={e.image} alt={`${e.title} banner image`} fill className="object-cover" />
+                    ) : (
+                      <Image src="/images/placeholder-event.svg" alt={`${e.title} placeholder image`} fill className="object-contain p-6 opacity-70" />
+                    )}
+                  </div>
                   <UICardContent className="p-5">
                     <div className="flex items-center gap-2 text-rose-700 font-medium mb-2">
                       <Calendar className="h-4 w-4" aria-hidden />

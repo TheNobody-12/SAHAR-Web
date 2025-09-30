@@ -104,15 +104,13 @@ export default function GalleryPage() {
           ) : (
             <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {filtered.map((img, i) => (
-                <li key={img.src} className="group relative">
+                <li key={`${img.src}-${i}`} className="group relative">
                   <button
                     className="block w-full overflow-hidden rounded-xl ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-primary"
                     onClick={() => setOpenIndex(i)}
                     aria-label={`View larger: ${img.alt}`}
                   >
-                    <div className="relative w-full aspect-[4/3] bg-gray-100">
-                      <Image src={img.src} alt={img.alt} fill className="object-cover transition-transform duration-300 group-hover:scale-105" />
-                    </div>
+                    <FallbackImg src={img.src} alt={img.alt} />
                   </button>
                   <div className="mt-2 text-sm text-gray-700 line-clamp-2" aria-hidden>
                     {img.alt}
@@ -164,5 +162,29 @@ export default function GalleryPage() {
         </div>
       )}
     </main>
+  );
+}
+
+function FallbackImg({ src, alt }: { src: string; alt: string }) {
+  const [ok, setOk] = useState(true);
+  return (
+    <div className="relative w-full aspect-[4/3] bg-gray-100">
+      {ok ? (
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          onError={() => setOk(false)}
+        />
+      ) : (
+        <Image
+          src="/images/placeholder-event.svg"
+          alt={`${alt} placeholder`}
+          fill
+          className="object-contain p-6 opacity-70"
+        />
+      )}
+    </div>
   );
 }
