@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card as UICard, CardContent as UICardContent, CardHeader as UICardHeader, CardTitle as UICardTitle } from "@/components/ui/card";
+import { Card as UICard, CardContent as UICardContent, CardTitle as UICardTitle } from "@/components/ui/card";
 import { POSTS, ALL_CATEGORIES } from "@/lib/posts";
 
 export default function BlogIndexPage() {

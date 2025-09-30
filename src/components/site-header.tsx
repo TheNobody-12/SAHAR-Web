@@ -26,10 +26,13 @@ const MENUS: MenuGroup[] = [
   },
 ];
 
-function useOnClickOutside<T extends HTMLElement>(ref: React.RefObject<T>, handler: () => void) {
+function useOnClickOutside(
+  ref: React.RefObject<HTMLElement> | React.MutableRefObject<HTMLElement | null>,
+  handler: () => void
+) {
   useEffect(() => {
     const listener = (e: MouseEvent) => {
-      const el = ref.current;
+      const el = ref.current as HTMLElement | null;
       if (!el || el.contains(e.target as Node)) return;
       handler();
     };
