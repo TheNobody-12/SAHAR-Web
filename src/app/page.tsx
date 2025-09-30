@@ -1,103 +1,187 @@
+'use client'
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Calendar, HeartHandshake, Users, Globe2, Sparkles, Mail, ArrowRight, PlayCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import Image from "next/image";
 
-export default function Home() {
+// Single-file preview component for a modern, non-profit style landing page.
+// Tailwind + shadcn/ui + framer-motion. Drop into a React app.
+export default function SahahrLanding() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="min-h-screen bg-white text-gray-800">
+      {/* Top Nav is provided globally via RootLayout's <SiteHeader /> */}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+      {/* Hero */}
+      <section className="relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,rgba(244,63,94,0.18),transparent_45%),radial-gradient(ellipse_at_bottom_left,rgba(251,191,36,0.18),transparent_45%)]"/>
+        <div className="max-w-7xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <motion.h1 initial={{y:20,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}} className="text-4xl md:text-6xl font-extrabold leading-tight">
+              Celebrating South Asian Heritage in Hamilton
+            </motion.h1>
+            <p className="mt-5 text-lg text-gray-600">
+              We unite communities through cultural programs, festivals, and support services for youth, seniors, and newcomers.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Button asChild className="bg-amber-400 text-black hover:bg-amber-500">
+                <Link href="/events">See Upcoming Events</Link>
+              </Button>
+              <Button variant="outline" className="gap-2">
+                <PlayCircle className="h-4 w-4"/> Watch Highlights
+              </Button>
+            </div>
+            <div className="mt-6 flex items-center gap-3">
+              <Badge className="bg-emerald-600">Registered Non‑Profit</Badge>
+              <Badge variant="outline">Volunteer‑Led</Badge>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src="/images/event1.jpeg"
+              alt="Community cultural event"
+              width={800}
+              height={1069}
+              className="rounded-3xl shadow-inner object-cover w-full h-auto"
+              priority
             />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <Image
+              src="/images/event2.jpeg"
+              alt="Cultural performance"
+              width={800}
+              height={1200}
+              className="rounded-3xl shadow-inner object-cover w-full h-auto translate-y-6"
+              priority
+            />
+            <Image
+              src="/images/event3.jpeg"
+              alt="Festival gathering"
+              width={1600}
+              height={1200}
+              className="col-span-2 rounded-3xl shadow-inner object-cover w-full h-auto"
+              priority
+            />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+
+      {/* Programs */}
+      <section id="programs" className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-end justify-between mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold">Programs & Services</h2>
+            <Button variant="ghost" className="gap-2">View All <ArrowRight className="h-4 w-4"/></Button>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {programs.map(({icon:Icon,title,desc,cta},i)=> (
+              <Card key={i} className="rounded-2xl shadow-sm border-gray-200">
+                <CardHeader>
+                  <div className="h-12 w-12 rounded-xl grid place-items-center bg-rose-50 text-rose-700">
+                    <Icon className="h-6 w-6"/>
+                  </div>
+                  <CardTitle className="mt-4 text-xl">{title}</CardTitle>
+                </CardHeader>
+                <CardContent className="text-gray-600">
+                  <p>{desc}</p>
+                  <Button variant="outline" className="mt-4">{cta}</Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Events */}
+      <section id="events" className="py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">Upcoming Events</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            {events.map((e,i)=> (
+              <Card key={i} className="rounded-2xl overflow-hidden">
+                <img src={e.img} alt={e.title} className="h-40 w-full object-cover" />
+                <CardContent className="p-5">
+                  <div className="flex items-center gap-2 text-rose-700 font-medium mb-2">
+                    <Calendar className="h-4 w-4"/> {e.date}
+                  </div>
+                  <h3 className="font-semibold text-lg">{e.title}</h3>
+                  <p className="text-gray-600 mt-1">{e.desc}</p>
+                  <Button className="mt-4 w-full">Register</Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Impact */}
+      <section id="impact" className="py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-10">Community Impact</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {stats.map((s,i)=> (
+              <Card key={i} className="rounded-2xl text-center">
+                <CardContent className="p-8">
+                  <div className="text-4xl font-extrabold">{s.value}</div>
+                  <div className="mt-2 text-gray-600">{s.label}</div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Stories / Testimonials */}
+      <section id="stories" className="py-16">
+        <div className="max-w-5xl mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-8">Stories from Our Community</h2>
+          <Card className="rounded-2xl">
+            <CardContent className="p-8">
+              <p className="text-lg leading-relaxed text-gray-700">
+                “The cultural workshops helped my kids connect with their roots and make new friends. We felt welcomed from the very first day.”
+              </p>
+              <div className="mt-4 font-semibold">— Community Member</div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Newsletter section; global footer is added in RootLayout */}
+      <section id="contact" className="py-16 bg-gray-900 text-white">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 className="text-3xl font-bold">Stay in the loop</h3>
+            <p className="mt-2 text-gray-300">Get updates on events, programs, and volunteer opportunities.</p>
+          </div>
+          <form className="flex gap-3">
+            <Input type="email" placeholder="Your email" className="bg-white text-gray-900" />
+            <Button className="gap-2 bg-amber-400 text-black hover:bg-amber-500">
+              <Mail className="h-4 w-4"/> Subscribe
+            </Button>
+          </form>
+        </div>
+      </section>
     </div>
   );
 }
+
+const programs = [
+  { icon: Globe2, title: "Cultural Celebrations", desc: "Diwali, Eid, Vaisakhi, Nepali New Year, Tamil Heritage Month and more.", cta: "Explore" },
+  { icon: Users, title: "Youth & Newcomers", desc: "Mentorship, language & arts workshops, community engagement.", cta: "Learn more" },
+  { icon: HeartHandshake, title: "Support & Advocacy", desc: "Mental health resources, seniors services, and social justice initiatives.", cta: "Get support" },
+];
+
+const events = [
+  { date: "Sat • Apr 12", title: "Spring Cultural Festival", desc: "A celebration of music, dance, and regional cuisines.", img: "/images/event1.jpeg" },
+  { date: "Sun • May 04", title: "Volunteer Onboarding", desc: "Learn how to get involved and support our programs.", img: "/images/event2.jpeg" },
+  { date: "Fri • Jun 20", title: "Heritage Story Night", desc: "Community storytelling and intergenerational dialogues.", img: "/images/event3.jpeg" },
+];
+
+const stats = [
+  { value: "5k+", label: "Event Attendees" },
+  { value: "120+", label: "Active Volunteers" },
+  { value: "40+", label: "Annual Programs" },
+  { value: "10+", label: "Partner Orgs" },
+];
