@@ -36,15 +36,24 @@ export default function LanguageSwitcher() {
     }
     window.googleTranslateElementInit = function () {
       try {
-        new window.google.translate.TranslateElement(
-          {
-            pageLanguage: "en",
-            includedLanguages: "hi,ur,ta,ne",
-            autoDisplay: false,
-          },
-          "google_translate_element"
-        );
-        setReady(true);
+        type TranslateCtor = new (
+          options: { pageLanguage: string; includedLanguages?: string; autoDisplay?: boolean },
+          elementId: string
+        ) => unknown;
+        const TranslateElement = window.google?.translate?.TranslateElement as unknown as
+          | TranslateCtor
+          | undefined;
+        if (TranslateElement) {
+          new TranslateElement(
+            {
+              pageLanguage: "en",
+              includedLanguages: "hi,ur,ta,ne",
+              autoDisplay: false,
+            },
+            "google_translate_element"
+          );
+          setReady(true);
+        }
       } catch {}
     };
     const s = document.createElement("script");

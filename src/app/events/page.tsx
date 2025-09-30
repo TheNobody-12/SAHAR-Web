@@ -3,12 +3,7 @@
 
 import { useMemo, useState } from "react";
 // Alias the UI Card pieces to avoid any duplicate identifier collisions
-import {
-  Card as UICard,
-  CardContent as UICardContent,
-  CardHeader as UICardHeader,
-  CardTitle as UICardTitle,
-} from "@/components/ui/card";
+import { Card as UICard, CardContent as UICardContent, CardTitle as UICardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Calendar, MapPin, Filter, ArrowRight } from "lucide-react";
