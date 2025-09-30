@@ -4,7 +4,14 @@ import { useEffect, useState } from "react";
 declare global {
   interface Window {
     googleTranslateElementInit?: () => void;
-    google?: any;
+    google?: {
+      translate: {
+        TranslateElement: new (
+          options: { pageLanguage: string; includedLanguages?: string; autoDisplay?: boolean },
+          elementId: string
+        ) => unknown;
+      };
+    };
   }
 }
 
@@ -29,8 +36,6 @@ export default function LanguageSwitcher() {
     }
     window.googleTranslateElementInit = function () {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        // @ts-ignore
         new window.google.translate.TranslateElement(
           {
             pageLanguage: "en",
@@ -44,7 +49,7 @@ export default function LanguageSwitcher() {
     };
     const s = document.createElement("script");
     s.id = "google-translate-script";
-    s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+    s.src = "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
     s.async = true;
     document.body.appendChild(s);
   }, []);

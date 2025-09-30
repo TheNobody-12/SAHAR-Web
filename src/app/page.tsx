@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { Calendar, HeartHandshake, Users, Globe2, ArrowRight, PlayCircle } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -193,7 +192,9 @@ export default function SahahrLanding() {
           <div className="grid md:grid-cols-3 gap-6">
             {events.map((e,i)=> (
               <Card key={i} className="rounded-2xl overflow-hidden">
-                <img src={e.img} alt={e.title} className="h-40 w-full object-cover" />
+                <div className="relative h-40 w-full">
+                  <Image src={e.img} alt={e.title} fill className="object-cover" />
+                </div>
                 <CardContent className="p-5">
                   <div className="flex items-center gap-2 text-rose-700 font-medium mb-2">
                     <Calendar className="h-4 w-4"/> {e.date}

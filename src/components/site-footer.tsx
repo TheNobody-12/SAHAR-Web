@@ -1,5 +1,6 @@
 import NewsletterForm from "@/components/newsletter-form";
 import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
+import Link from "next/link";
 
 export function SiteFooter() {
   return (
@@ -19,7 +20,7 @@ export function SiteFooter() {
           <nav className="flex gap-3 text-sm text-white/70">
             <a href="#" className="hover:text-white">Privacy</a>
             <a href="#" className="hover:text-white">Accessibility</a>
-            <a href="/#contact" className="hover:text-white">Contact</a>
+            <Link href="/#contact" className="hover:text-white">Contact</Link>
           </nav>
           <div className="flex items-center gap-3">
             <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-white/70 hover:text-white">

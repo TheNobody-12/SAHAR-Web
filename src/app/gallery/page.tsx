@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -42,27 +42,22 @@ export default function GalleryPage() {
     });
   }, [query, category]);
 
+  const next = useCallback(() => {
+    setOpenIndex((i) => (i === null ? 0 : (i + 1) % filtered.length));
+  }, [filtered.length]);
+  const prev = useCallback(() => {
+    setOpenIndex((i) => (i === null ? 0 : (i - 1 + filtered.length) % filtered.length));
+  }, [filtered.length]);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (openIndex === null) return;
       if (e.key === "Escape") setOpenIndex(null);
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [openIndex]);
-
-  const next = () => {
-    if (openIndex === null) return;
-    const i = (openIndex + 1) % filtered.length;
-    setOpenIndex(i);
-  };
-  const prev = () => {
-    if (openIndex === null) return;
-    const i = (openIndex - 1 + filtered.length) % filtered.length;
-    setOpenIndex(i);
-  };
+  }, [next, prev]);
 
   return (
     <main className="min-h-screen bg-white">
@@ -171,4 +166,3 @@ export default function GalleryPage() {
     </main>
   );
 }
-
