@@ -49,7 +49,7 @@ export default function AboutPage() {
       </section>
 
       {/* Mission & Values */}
-      <section className="py-12 bg-gray-50">
+      <section id="mission" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-6">
           <UICard className="rounded-2xl">
             <UICardHeader>
@@ -81,7 +81,7 @@ export default function AboutPage() {
       </section>
 
       {/* Constitution / By-Laws */}
-      <section className="py-12">
+      <section id="bylaws" className="py-12">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold mb-6">
             Constitution or By‑Laws
@@ -194,7 +194,7 @@ export default function AboutPage() {
       </section>
 
       {/* Board of Directors */}
-      <section className="py-12">
+      <section id="board" className="py-12">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-2xl md:text-3xl font-bold mb-6">
             Board of Directors
