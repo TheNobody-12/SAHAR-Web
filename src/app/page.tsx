@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
 import NewsletterForm from "@/components/newsletter-form";
+import HeroMosaic from "@/components/hero-mosaic";
 
 // Single-file preview component for a modern, non-profit style landing page.
 // Tailwind + shadcn/ui + framer-motion. Drop into a React app.
@@ -39,75 +40,7 @@ export default function SahahrLanding() {
               <Badge variant="outline">Volunteer‑Led</Badge>
             </div>
           </div>
-          <div className="relative">
-            <div className="pointer-events-none absolute -top-6 -left-10 h-40 w-40 rounded-full bg-rose-400/30 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-8 -right-10 h-48 w-48 rounded-full bg-amber-300/30 blur-3xl" />
-
-            <div className="grid grid-cols-2 gap-4">
-              <motion.figure
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.05 }}
-                className="group relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5"
-              >
-                <Image
-                  src="/images/event1.jpeg"
-                  alt="Community cultural event"
-                  width={800}
-                  height={1069}
-                  className="object-cover w-full h-auto transition-transform duration-500 group-hover:scale-105 group-hover:rotate-[0.6deg]"
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute left-3 bottom-3 inline-flex items-center rounded-full bg-white/85 backdrop-blur px-2.5 py-1 text-[11px] font-medium text-gray-900 shadow">
-                  Festival
-                </div>
-              </motion.figure>
-
-              <motion.figure
-                initial={{ y: 24, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.12 }}
-                className="group relative rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5 translate-y-6"
-              >
-                <Image
-                  src="/images/event2.jpeg"
-                  alt="Cultural performance"
-                  width={800}
-                  height={1200}
-                  className="object-cover w-full h-auto transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-[0.6deg]"
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute left-3 bottom-3 inline-flex items-center rounded-full bg-white/85 backdrop-blur px-2.5 py-1 text-[11px] font-medium text-gray-900 shadow">
-                  Performance
-                </div>
-              </motion.figure>
-
-              <motion.figure
-                initial={{ y: 28, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true, margin: "-20% 0px -20% 0px" }}
-                transition={{ duration: 0.6, ease: "easeOut", delay: 0.18 }}
-                className="group relative col-span-2 rounded-3xl overflow-hidden shadow-2xl ring-1 ring-black/5"
-              >
-                <Image
-                  src="/images/event3.jpeg"
-                  alt="Festival gathering"
-                  width={1600}
-                  height={1200}
-                  className="object-cover w-full h-auto transition-transform duration-700 group-hover:scale-[1.03]"
-                  priority
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="absolute left-4 bottom-4 inline-flex items-center rounded-full bg-white/85 backdrop-blur px-3 py-1.5 text-xs font-semibold text-gray-900 shadow">
-                  Community Gathering
-                </div>
-              </motion.figure>
-            </div>
-          </div>
+          <HeroMosaic />
         </div>
       </section>
 
@@ -277,9 +210,9 @@ const currentPrograms = [
 ];
 
 const events = [
-  { date: "Sat • Apr 12", title: "Spring Cultural Festival", desc: "A celebration of music, dance, and regional cuisines.", img: "/images/event1.jpeg" },
+  { date: "Sat • Apr 12", title: "Spring Cultural Festival", desc: "A celebration of music, dance, and regional cuisines.", img: "/images/event4.jpeg" },
   { date: "Sun • May 04", title: "Volunteer Onboarding", desc: "Learn how to get involved and support our programs.", img: "/images/event2.jpeg" },
-  { date: "Fri • Jun 20", title: "Heritage Story Night", desc: "Community storytelling and intergenerational dialogues.", img: "/images/event3.jpeg" },
+  { date: "Fri • Jun 20", title: "Heritage Story Night", desc: "Community storytelling and intergenerational dialogues.", img: "/images/event7.jpeg" },
 ];
 
 const stats = [
