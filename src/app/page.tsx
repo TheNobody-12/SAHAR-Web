@@ -8,6 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import NewsletterForm from "@/components/newsletter-form";
 import HeroMosaic from "@/components/hero-mosaic";
+import AuroraBackground from "@/components/aurora-background";
 
 // Single-file preview component for a modern, non-profit style landing page.
 // Tailwind + shadcn/ui + framer-motion. Drop into a React app.
@@ -18,26 +19,29 @@ export default function SahahrLanding() {
 
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_right,rgba(244,63,94,0.18),transparent_45%),radial-gradient(ellipse_at_bottom_left,rgba(251,191,36,0.18),transparent_45%)]"/>
-        <div className="max-w-7xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
-          <div>
+        <AuroraBackground theme="dark" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 py-20 grid md:grid-cols-2 gap-12 items-center">
+          <div className="text-white">
             <motion.h1 initial={{y:20,opacity:0}} animate={{y:0,opacity:1}} transition={{duration:.6}} className="text-4xl md:text-6xl font-extrabold leading-tight">
               Celebrating South Asian Heritage in Hamilton
             </motion.h1>
-            <p className="mt-5 text-lg text-gray-600">
+            <p className="mt-5 text-lg text-white/80">
               We unite communities through cultural programs, festivals, and support services for youth, seniors, and newcomers.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Button asChild>
                 <Link href="/events">See Upcoming Events</Link>
               </Button>
-              <Button variant="outline" className="gap-2">
+              <Button
+                variant="outline"
+                className="gap-2 text-black border-white/30 hover:bg-white/5"
+              >
                 <PlayCircle className="h-4 w-4"/> Watch Highlights
               </Button>
             </div>
             <div className="mt-6 flex items-center gap-3">
-              <Badge className="bg-emerald-600">Registered Non‑Profit</Badge>
-              <Badge variant="outline">Volunteer‑Led</Badge>
+              <Badge className="bg-emerald-600 text-white">Registered Non‑Profit</Badge>
+              <Badge variant="outline" className="border-white/30 text-white">Volunteer‑Led</Badge>
             </div>
           </div>
           <HeroMosaic />
@@ -64,7 +68,7 @@ export default function SahahrLanding() {
           </div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {programs.map(({icon:Icon,title,desc,cta},i)=> (
-              <Card key={i} className="rounded-2xl shadow-sm border-gray-200">
+              <Card key={i} className={`overflow-hidden shadow-sm border-gray-200 ${i % 2 ? 'card-swoop-bl' : 'card-swoop-br'}`}>
                 <CardHeader>
                   <div className="h-12 w-12 rounded-xl grid place-items-center bg-rose-50 text-rose-700">
                     <Icon className="h-6 w-6"/>
@@ -124,7 +128,7 @@ export default function SahahrLanding() {
           <h2 className="text-3xl md:text-4xl font-bold mb-8">Upcoming Events</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {events.map((e,i)=> (
-              <Card key={i} className="rounded-2xl overflow-hidden">
+              <Card key={i} className={`overflow-hidden ${i % 2 ? 'card-swoop-br' : 'card-swoop-bl'}`}>
                 <div className="relative h-40 w-full">
                   <Image src={e.img} alt={e.title} fill className="object-cover" />
                 </div>
