@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from "@portabletext/types";
+
 export type SanityImage = {
   url?: string | null;
   alt?: string | null;
@@ -22,7 +24,7 @@ export type SanityEvent = {
   category?: string | null;
   location?: string | null;
   summary?: string | null;
-  body?: unknown[];
+  body?: PortableTextBlock[];
   registerUrl?: string | null;
   image?: SanityImage | null;
 };
@@ -34,7 +36,7 @@ export type SanityPost = {
   date?: string;
   categories?: string[];
   excerpt?: string | null;
-  content?: unknown[];
+  content?: PortableTextBlock[];
   coverImage?: SanityImage | null;
 };
 
