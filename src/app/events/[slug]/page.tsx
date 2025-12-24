@@ -6,7 +6,8 @@ import { Calendar, MapPin, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sanityFetch } from "@/lib/sanity";
 import { SanityEvent } from "@/lib/types";
-import { urlForImage } from "@/lib/sanity-image";
+import imageUrlBuilder from "@sanity/image-url";
+import { sanityClient } from "@/lib/sanity";
 
 type Props = { params: { slug: string } };
 
@@ -118,7 +119,7 @@ const portableTextComponents = {
   types: {
     image: ({ value }: { value?: { asset?: { _ref?: string | null } | null; alt?: string | null } }) => {
       if (!value?.asset?._ref) return null;
-      const url = urlForImage(value).width(1200).quality(80).url();
+      const url = builder.image(value).width(1200).quality(80).url();
       return (
         <Image
           src={url}
@@ -131,3 +132,5 @@ const portableTextComponents = {
     },
   },
 };
+
+const builder = imageUrlBuilder(sanityClient);

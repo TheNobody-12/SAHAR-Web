@@ -5,7 +5,8 @@ import { PortableText } from "@portabletext/react";
 import { Badge } from "@/components/ui/badge";
 import { sanityFetch } from "@/lib/sanity";
 import { SanityPost } from "@/lib/types";
-import { urlForImage } from "@/lib/sanity-image";
+import imageUrlBuilder from "@sanity/image-url";
+import { sanityClient } from "@/lib/sanity";
 
 type Props = { params: { slug: string } };
 
@@ -98,7 +99,7 @@ const portableTextComponents = {
   types: {
     image: ({ value }: { value?: PortableImageValue }) => {
       if (!value?.asset?._ref) return null;
-      const url = urlForImage(value).width(1200).quality(80).url();
+      const url = builder.image(value).width(1200).quality(80).url();
       return (
         <Image
           src={url}
@@ -111,3 +112,5 @@ const portableTextComponents = {
     },
   },
 };
+
+const builder = imageUrlBuilder(sanityClient);
