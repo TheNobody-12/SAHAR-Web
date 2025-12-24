@@ -7,20 +7,61 @@ import {
   CardTitle as UICardTitle,
 } from "@/components/ui/card";
 import Carousel from "@/components/carousel";
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
+import {
+  Facebook,
+  HandHeart,
+  Instagram,
+  Linkedin,
+  Twitter,
+  Users,
+  Globe2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
 const BOARD = [
-  { name: "Member 1", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 2", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 3", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 4", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 5", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 6", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 7", title: "Board Member", img: "/images/avatar.svg" },
-  { name: "Member 8", title: "Board Member", img: "/images/avatar.svg" },
+  { name: "Member 1", title: "President", img: "/images/avatar.svg", bio: "Leads strategy and partnerships." },
+  { name: "Member 2", title: "Vice President", img: "/images/avatar.svg", bio: "Supports programs and governance." },
+  { name: "Member 3", title: "Treasurer", img: "/images/avatar.svg", bio: "Oversees finances and reporting." },
+  { name: "Member 4", title: "Secretary", img: "/images/avatar.svg", bio: "Coordinates meetings and records." },
+  { name: "Member 5", title: "Board Member", img: "/images/avatar.svg", bio: "Program liaison." },
+  { name: "Member 6", title: "Board Member", img: "/images/avatar.svg", bio: "Community outreach." },
+  { name: "Member 7", title: "Board Member", img: "/images/avatar.svg", bio: "Volunteer coordination." },
+  { name: "Member 8", title: "Board Member", img: "/images/avatar.svg", bio: "Partnerships and sponsorships." },
+];
+
+const missionCards = [
+  {
+    title: "Mission",
+    icon: Globe2,
+    points: [
+      "Celebrate South Asian heritage through culture, arts, and language.",
+      "Offer programs that promote belonging, learning, and well‑being.",
+    ],
+  },
+  {
+    title: "Vision",
+    icon: Users,
+    points: [
+      "An inclusive Hamilton where diversity is embraced.",
+      "Communities thrive through connection and shared stories.",
+    ],
+  },
+  {
+    title: "Values",
+    icon: HandHeart,
+    points: [
+      "Community • Inclusion • Respect • Collaboration • Transparency.",
+    ],
+  },
+];
+
+const partners = [
+  { name: "Community Partner 1" },
+  { name: "Community Partner 2" },
+  { name: "Sponsor A" },
+  { name: "Sponsor B" },
 ];
 
 export default function AboutPage() {
@@ -35,11 +76,11 @@ export default function AboutPage() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/25 to-black/5" />
         <div className="absolute inset-0">
           <div className="max-w-7xl mx-auto h-full px-4 flex items-end pb-10">
             <div className="text-white">
-              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight">
+              <h1 className="text-4xl md:text-6xl font-extrabold leading-tight drop-shadow">
                 Belonging Through Culture and Community
               </h1>
               <p className="mt-3 max-w-2xl text-white/90">
@@ -73,13 +114,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 py-12">
           <h1 className="text-3xl md:text-4xl font-extrabold">About SAHAHR</h1>
           <p className="text-gray-600 mt-3 max-w-3xl">
-            South Asian Heritage Association of Hamilton and Region exists to
-            educate the public on matters relating to the rich heritage,
-            culture, history, traditions,and languages of South Asian community
-            by providing courses, seminars,workshops and other educational
-            programs on such matters. The Organization will also work with other
-            charitable, educational or Governmental agencies in program to
-            advance the South Asian Culture, Traditions art and language.{" "}
+            South Asian Heritage Association of Hamilton and Region exists to educate, celebrate, and connect our community through programs that honor culture, language, and shared experiences.
           </p>
         </div>
       </section>
@@ -87,32 +122,24 @@ export default function AboutPage() {
       {/* Mission & Values */}
       <section id="mission" className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-6">
-          <UICard className="rounded-2xl">
-            <UICardHeader>
-              <UICardTitle>Mission</UICardTitle>
-            </UICardHeader>
-            <UICardContent className="text-gray-700">
-              To celebrate South Asian heritage and support our community
-              through programs that promote belonging, learning, and well-being.
-            </UICardContent>
-          </UICard>
-          <UICard className="rounded-2xl">
-            <UICardHeader>
-              <UICardTitle>Vision</UICardTitle>
-            </UICardHeader>
-            <UICardContent className="text-gray-700">
-              A connected, inclusive Hamilton where diversity is embraced and
-              everyone can thrive.
-            </UICardContent>
-          </UICard>
-          <UICard className="rounded-2xl">
-            <UICardHeader>
-              <UICardTitle>Values</UICardTitle>
-            </UICardHeader>
-            <UICardContent className="text-gray-700">
-              Community • Inclusion • Respect • Collaboration • Transparency.
-            </UICardContent>
-          </UICard>
+          {missionCards.map((m) => (
+            <UICard key={m.title} className="rounded-2xl shadow-sm border-gray-100">
+              <UICardHeader className="space-y-3">
+                <div className="h-11 w-11 rounded-xl bg-rose-50 text-rose-700 grid place-items-center">
+                  <m.icon className="h-5 w-5" />
+                </div>
+                <UICardTitle>{m.title}</UICardTitle>
+              </UICardHeader>
+              <UICardContent className="text-gray-700 space-y-2">
+                {m.points.map((p) => (
+                  <div key={p} className="flex items-start gap-2">
+                    <span className="mt-1 h-2 w-2 rounded-full bg-rose-500" aria-hidden />
+                    <p>{p}</p>
+                  </div>
+                ))}
+              </UICardContent>
+            </UICard>
+          ))}
         </div>
       </section>
 
@@ -132,98 +159,26 @@ export default function AboutPage() {
             </UICardHeader>
             <UICardContent className="space-y-6 text-gray-700">
               <p>
-                You can download a copy of the by‑laws{" "}
+                Download the full by‑laws{" "}
                 <a
                   className="text-rose-700 underline"
                   href="/documents/sahahr-by-laws.pdf"
                 >
                   here
                 </a>
-                .
+                . Below is a quick summary of key objectives.
               </p>
 
               <div>
-                <h3 className="font-semibold text-lg">Vision</h3>
-                <p className="mt-2">
-                  We envision a community that is inclusive, democratic,
-                  respects and celebrates the cultural diversity of Canada, and
-                  where the South Asian community plays an active and integrated
-                  role in all aspects of civic, political, social and cultural
-                  life of Canada.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-lg">Mission</h3>
-                <p className="mt-2">
-                  Our mission is to educate, showcase and promote the cultures
-                  of South Asia through cultural, literary and other events in
-                  Hamilton and beyond.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="font-semibold text-lg">Objectives</h3>
-                <ul className="mt-2 list-disc pl-5 space-y-1">
-                  <li>
-                    Promote a positive image of the South Asian community in
-                    Hamilton and Region by showcasing South Asian cultures.
-                  </li>
-                  <li>
-                    Enable and facilitate South Asian Canadians to participate
-                    and integrate in the civic, social and cultural life of
-                    Canada.
-                  </li>
-                  <li>
-                    Promote the interests and rights of the South Asian Canadian
-                    community through partnerships with municipal, provincial
-                    and federal bodies and other organizations in Hamilton.
-                  </li>
-                  <li>
-                    Instill in youth of South Asian origin a sense of pride in
-                    their cultural heritage.
-                  </li>
-                  <li>
-                    Foster and encourage cooperation among members and with
-                    other organizations.
-                  </li>
-                  <li>
-                    Support social and cultural activities while not affiliating
-                    SAHAHR with any religious or political activities.
-                  </li>
+                <h3 className="font-semibold text-lg">Key Objectives</h3>
+                <ul className="mt-2 list-disc pl-5 space-y-2">
+                  <li>Showcase South Asian culture through festivals, arts, and educational programs.</li>
+                  <li>Support newcomers, youth, and seniors with community resources and mentorship.</li>
+                  <li>Promote inclusion and civic engagement with partners across Hamilton & Region.</li>
+                  <li>Foster cooperation among community members and partner organizations.</li>
+                  <li>Remain non-partisan and respectful of all backgrounds.</li>
                 </ul>
               </div>
-
-              <div>
-                <h3 className="font-semibold text-lg">Definitions</h3>
-                <p className="mt-2">
-                  “South Asia” includes Afghanistan, Bangladesh, Bhutan, India,
-                  Maldives, Nepal, Pakistan, and Sri Lanka. “People of South
-                  Asian origin” are individuals who trace their ancestry from
-                  any country of South Asia, irrespective of their place of
-                  birth or residence.
-                </p>
-              </div>
-
-              <details className="mt-2">
-                <summary className="cursor-pointer font-medium text-gray-800">
-                  More by‑law notes
-                </summary>
-                <div className="mt-3 space-y-3 text-gray-700">
-                  <p>
-                    The by‑laws relate to the transaction of SAHAHR’s affairs.
-                    They will be reviewed every 5 years during a strategic
-                    review. Amendments can be made by the Board and ratified by
-                    the General Body as needed.
-                  </p>
-                  <p>
-                    An Appendix contains information that may change from time
-                    to time and can be revised by the Secretary with Board
-                    approval; prior versions are retained as historical records
-                    with effective dates.
-                  </p>
-                </div>
-              </details>
             </UICardContent>
           </UICard>
         </div>
@@ -260,6 +215,7 @@ export default function AboutPage() {
                 <UICardContent className="p-5">
                   <div className="font-semibold">{m.name}</div>
                   <div className="text-gray-600 text-sm">{m.title}</div>
+                  <p className="mt-2 text-sm text-gray-600">{m.bio}</p>
                   <div className="mt-3 flex items-center gap-3 text-gray-500">
                     <a href="#" aria-label={`${m.name} on Facebook`} className="hover:text-rose-700">
                       <Facebook className="h-4 w-4" />
@@ -284,14 +240,42 @@ export default function AboutPage() {
       {/* Partners */}
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">
-            Partners & Sponsors
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="h-16 rounded-xl bg-gray-100" />
-            <div className="h-16 rounded-xl bg-gray-100" />
-            <div className="h-16 rounded-xl bg-gray-100" />
-            <div className="h-16 rounded-xl bg-gray-100" />
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl md:text-3xl font-bold">
+              Partners & Sponsors
+            </h2>
+            <Button variant="outline" asChild>
+              <Link href="/contact">Become a partner</Link>
+            </Button>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 items-center">
+            {partners.map((p) => (
+              <div
+                key={p.name}
+                className="h-16 rounded-xl bg-white border border-gray-200 shadow-sm grid place-items-center px-3"
+              >
+                <span className="text-gray-700 text-sm font-medium">
+                  {p.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Volunteer CTA */}
+      <section className="py-12">
+        <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h3 className="text-3xl font-bold">Volunteer with us</h3>
+            <p className="text-gray-600 mt-2">
+              Join our events, youth programs, and cultural celebrations. Your skills and time help us reach more families.
+            </p>
+          </div>
+          <div className="text-right">
+            <Button asChild size="lg">
+              <Link href="/contact">Sign up to volunteer</Link>
+            </Button>
           </div>
         </div>
       </section>

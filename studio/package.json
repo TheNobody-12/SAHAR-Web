@@ -1,0 +1,19 @@
+{
+  "name": "studio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "sanity dev",
+    "deploy": "sanity deploy"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@sanity/vision": "^4.21.1",
+    "sanity": "^4.21.1",
+    "styled-components": "^6.1.19"
+  }
+}
