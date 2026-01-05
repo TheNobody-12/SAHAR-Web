@@ -103,7 +103,7 @@ export function BlogClient({ posts }: Props) {
                       src={p.coverImage.url}
                       alt={p.coverImage.alt || `Cover image for ${p.title}`}
                       fill
-                      className="object-contain lg:object-cover"
+                      className="object-contain"
                       sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                     />
                   </div>
