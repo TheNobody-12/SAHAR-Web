@@ -1,6 +1,7 @@
 "use client";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/language-switcher";
@@ -53,8 +54,14 @@ export function SiteHeader() {
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-400" />
-            <span className="font-bold text-xl">SAHAHR</span>
+            <Image
+              src="/logo-sahahr.svg"
+              alt="South Asian Heritage Association of Hamilton and Region"
+              width={210}
+              height={60}
+              priority
+              className="h-10 w-auto"
+            />
           </Link>
         </div>
 

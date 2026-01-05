@@ -4,6 +4,7 @@ import post from "../schemas/post";
 import galleryItem from "../schemas/galleryItem";
 import resource from "../schemas/resource";
 import siteSettings from "../schemas/siteSettings";
+import boardMember from "../schemas/boardMember";
 
 export const schemaTypes = [
   program,
@@ -12,4 +13,5 @@ export const schemaTypes = [
   galleryItem,
   resource,
   siteSettings,
+  boardMember,
 ];

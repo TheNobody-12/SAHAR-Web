@@ -1,15 +1,12 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Calendar,
-  HeartHandshake,
   Users,
   Globe2,
-  ArrowRight,
-  PlayCircle,
   HandHeart,
   BarChart3,
 } from "lucide-react";
@@ -18,22 +15,15 @@ import Link from "next/link";
 import Image from "next/image";
 import HeroMosaic from "@/components/hero-mosaic";
 import AuroraBackground from "@/components/aurora-background";
-import {
-  SanityEvent,
-  SanityImpactStat,
-  SanityProgram,
-} from "@/lib/types";
+import { SanityEvent, SanityImpactStat } from "@/lib/types";
 import FeedbackForm from "@/components/feedback-form";
 
 type Props = {
-  programs: SanityProgram[];
   events: SanityEvent[];
   stats: SanityImpactStat[];
 };
 
-export function HomeClient({ programs, events, stats }: Props) {
-  const programCards = programs.length ? programs : fallbackPrograms;
-  const currentPrograms = programCards.slice(0, 3);
+export function HomeClient({ events, stats }: Props) {
   const eventCards = events.length ? events : fallbackEvents;
   const impactStats = stats.length ? stats : fallbackStats;
 
@@ -60,13 +50,6 @@ export function HomeClient({ programs, events, stats }: Props) {
               <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
                 <Link href="/events">See Upcoming Events</Link>
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="gap-2 border-white/40 text-white hover:bg-white/10 hover:text-white"
-              >
-                <PlayCircle className="h-4 w-4" /> Watch Highlights
-              </Button>
             </div>
             <div className="mt-6 flex items-center gap-3">
               <Badge className="bg-emerald-600 text-white">Registered Non‑Profit</Badge>
@@ -76,73 +59,6 @@ export function HomeClient({ programs, events, stats }: Props) {
             </div>
           </div>
           <HeroMosaic />
-        </div>
-      </section>
-
-      {/* Programs */}
-      <section id="programs" className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-end justify-between mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold">Programs & Services</h2>
-            <Button variant="ghost" className="gap-2">
-              View All <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {programCards.map((p, i) => {
-              const Icon = programIcons[i % programIcons.length];
-              return (
-                <Card
-                  key={p._id || p.title}
-                  className={`overflow-hidden shadow-sm border-gray-100 bg-white/90 transition hover:-translate-y-1 hover:shadow-lg ${
-                    i % 2 ? "card-swoop-bl" : "card-swoop-br"
-                  }`}
-                >
-                  <CardHeader className="space-y-3">
-                    <div className="h-12 w-12 rounded-xl grid place-items-center bg-rose-50 text-rose-700 shadow-inner">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <CardTitle className="mt-4 text-xl">{p.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent className="text-gray-600 leading-relaxed">
-                    <p>{p.summary}</p>
-                    <Button
-                      variant="outline"
-                      className="mt-4"
-                      asChild
-                    >
-                      <Link href={p.ctaUrl || "#"}>{p.ctaLabel || "Learn more"}</Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Current Programs */}
-      <section id="current-programs" className="py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Current Programs</h2>
-          <div className="grid gap-6 md:grid-cols-3">
-            {currentPrograms.map((p) => (
-              <Card
-                key={`${p._id || p.title}-current`}
-                className="rounded-2xl shadow-sm border-gray-200"
-              >
-                <CardHeader>
-                  <CardTitle className="text-xl">{p.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="text-gray-600">
-                  <p>{p.summary}</p>
-                  <Button asChild className="mt-4">
-                    <Link href="/#programs">View Programs</Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -259,14 +175,6 @@ export function HomeClient({ programs, events, stats }: Props) {
     </div>
   );
 }
-
-const programIcons = [Globe2, Users, HeartHandshake];
-
-const fallbackPrograms: SanityProgram[] = [
-  { _id: "fallback-1", title: "Cultural Celebrations", summary: "Diwali, Eid, Vaisakhi, Nepali New Year, Tamil Heritage Month and more.", ctaLabel: "Explore" },
-  { _id: "fallback-2", title: "Youth & Newcomers", summary: "Mentorship, language & arts workshops, community engagement.", ctaLabel: "Learn more" },
-  { _id: "fallback-3", title: "Support & Advocacy", summary: "Mental health resources, seniors services, and social justice initiatives.", ctaLabel: "Get support" },
-];
 
 const fallbackEvents: SanityEvent[] = [
   { _id: "fallback-e1", title: "Spring Cultural Festival", date: "2025-04-12", summary: "A celebration of music, dance, and regional cuisines.", image: { url: "/images/event4.jpeg", alt: "Spring Cultural Festival" } },

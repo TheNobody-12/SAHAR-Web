@@ -7,29 +7,16 @@ import {
   CardTitle as UICardTitle,
 } from "@/components/ui/card";
 import Carousel from "@/components/carousel";
-import {
-  Facebook,
-  HandHeart,
-  Instagram,
-  Linkedin,
-  Twitter,
-  Users,
-  Globe2,
-} from "lucide-react";
+import BoardMembersFeature, { type BoardMember, type SanityBoardMember } from "@/components/board/BoardMembersFeature";
+import { sanityClient, sanityFetch } from "@/lib/sanity";
+import { createImageUrlBuilder } from "@sanity/image-url";
+import { HandHeart, Users, Globe2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 
-const BOARD = [
-  { name: "Member 1", title: "President", img: "/images/avatar.svg", bio: "Leads strategy and partnerships." },
-  { name: "Member 2", title: "Vice President", img: "/images/avatar.svg", bio: "Supports programs and governance." },
-  { name: "Member 3", title: "Treasurer", img: "/images/avatar.svg", bio: "Oversees finances and reporting." },
-  { name: "Member 4", title: "Secretary", img: "/images/avatar.svg", bio: "Coordinates meetings and records." },
-  { name: "Member 5", title: "Board Member", img: "/images/avatar.svg", bio: "Program liaison." },
-  { name: "Member 6", title: "Board Member", img: "/images/avatar.svg", bio: "Community outreach." },
-  { name: "Member 7", title: "Board Member", img: "/images/avatar.svg", bio: "Volunteer coordination." },
-  { name: "Member 8", title: "Board Member", img: "/images/avatar.svg", bio: "Partnerships and sponsorships." },
-];
+// Ensure we always fetch fresh board data from Sanity (no stale cache).
+export const revalidate = 0;
 
 const missionCards = [
   {
@@ -58,13 +45,196 @@ const missionCards = [
 ];
 
 const partners = [
-  { name: "Community Partner 1" },
-  { name: "Community Partner 2" },
-  { name: "Sponsor A" },
-  { name: "Sponsor B" },
+  { name: "City of Hamilton Enrichment Fund", img: "/sponsors/city-of-hamilton.png" },
+  { name: "CUPE 3906", img: "/sponsors/cupe-3906.png" },
+  { name: "GSA McMaster University", img: "/sponsors/gsa-mcmaster.png" },
+  { name: "Government of Canada", img: "/sponsors/canada-wordmark.png" },
 ];
 
-export default function AboutPage() {
+const FALLBACK_BOARD_MEMBERS: BoardMember[] = [
+  {
+    id: "member-1",
+    name: "Member 1",
+    role: "President",
+    img: "/images/avatar.svg",
+    bio: "Leads strategy and partnerships.",
+    order: 1,
+    facebookUrl: "https://facebook.com",
+    instagramUrl: "https://instagram.com",
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-2",
+    name: "Member 2",
+    role: "Vice President",
+    img: "/images/avatar.svg",
+    bio: "Supports programs and governance.\n\nBorn and raised in Nepal, Kusum Bhatta is pursuing her Ph.D. in the School of Social Work at McMaster University, where she obtained her Master's degree in Gender Studies and Feminist Research. She is the co-chair of the Women's Committee, serving as a President of the Graduate Student Association, Vice President of CUPE 3906, and representing Social Sciences as a student senate representative at McMaster University. Her research and advocacy efforts draw attention to the essential contributions of immigrant aging women of color, who are often undervalued and unrecognized for their care work.",
+    order: 2,
+    facebookUrl: "https://facebook.com",
+    instagramUrl: "https://instagram.com",
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-3",
+    name: "Member 3",
+    role: "Treasurer",
+    img: "/images/avatar.svg",
+    bio: "Oversees finances and reporting.",
+    order: 3,
+    facebookUrl: "https://facebook.com",
+    instagramUrl: "https://instagram.com",
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-4",
+    name: "Member 4",
+    role: "Secretary",
+    img: "/images/avatar.svg",
+    bio: "Coordinates meetings and records.",
+    order: 4,
+    facebookUrl: "https://facebook.com",
+    instagramUrl: "https://instagram.com",
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-5",
+    name: "Member 5",
+    role: "Board Member",
+    img: "/images/avatar.svg",
+    bio: "Program liaison.",
+    order: 5,
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-6",
+    name: "Member 6",
+    role: "Board Member",
+    img: "/images/avatar.svg",
+    bio: "Community outreach.",
+    order: 6,
+    facebookUrl: "https://facebook.com",
+    instagramUrl: "https://instagram.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-7",
+    name: "Member 7",
+    role: "Board Member",
+    img: "/images/avatar.svg",
+    bio: "Volunteer coordination.",
+    order: 7,
+    facebookUrl: "https://facebook.com",
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+  {
+    id: "member-8",
+    name: "Member 8",
+    role: "Board Member",
+    img: "/images/avatar.svg",
+    bio: "Partnerships and sponsorships.",
+    order: 8,
+    instagramUrl: "https://instagram.com",
+    twitterUrl: "https://x.com",
+    linkedinUrl: "https://linkedin.com",
+  },
+];
+
+type BoardDataResult = { members: BoardMember[]; reason?: string };
+
+function portableTextToPlainText(blocks?: SanityBoardMember["bio"]): string {
+  if (!blocks?.length) return "";
+  return blocks
+    .map((block) => block?.children?.map((child) => child?.text ?? "").join("").trim() ?? "")
+    .filter(Boolean)
+    .join("\n\n");
+}
+
+const imageBuilder = createImageUrlBuilder(sanityClient);
+
+function buildBoardImageUrl(photo?: SanityBoardMember["photo"]) {
+  if (!photo?.asset?._ref) return photo?.asset?.url;
+  return imageBuilder
+    .image({
+      _type: "image",
+      asset: { _ref: photo.asset._ref },
+      crop: photo.crop,
+      hotspot: photo.hotspot,
+    })
+    .width(800)
+    .height(800)
+    .fit("crop")
+    .auto("format")
+    .url();
+}
+
+function normalizeSanityBoardMembersServer(docs: SanityBoardMember[]): BoardMember[] {
+  return docs.map((doc) => {
+    const bio = portableTextToPlainText(doc.bio);
+    return {
+      id: doc._id,
+      name: doc.name,
+      role: doc.role,
+      group: doc.isExecutive ? "executive" : undefined,
+      order: doc.order,
+      photoUrl: buildBoardImageUrl(doc.photo),
+      photoAlt: doc.photo?.alt,
+      bio: bio || "",
+      facebookUrl: doc.facebookUrl,
+      instagramUrl: doc.instagramUrl,
+      twitterUrl: doc.twitterUrl,
+      linkedinUrl: doc.linkedinUrl,
+    };
+  });
+}
+
+async function getBoardMembers(): Promise<BoardDataResult> {
+  try {
+    const docs = await sanityFetch<SanityBoardMember[]>({
+      query: `
+        *[_type == "boardMember"] | order(order asc) {
+          _id,
+          name,
+          role,
+          isExecutive,
+          order,
+          photo{
+            asset->{_ref, url},
+            crop,
+            hotspot,
+            alt
+          },
+          bio,
+          facebookUrl,
+          instagramUrl,
+          twitterUrl,
+          linkedinUrl
+        }
+      `,
+      revalidate: 0,
+    });
+
+    const normalized = normalizeSanityBoardMembersServer(docs);
+    if (normalized.length) return { members: normalized };
+    return { members: FALLBACK_BOARD_MEMBERS, reason: "No published board members found in Sanity (boardMember collection is empty)." };
+  } catch (error) {
+    return {
+      members: FALLBACK_BOARD_MEMBERS,
+      reason: `Failed to load from Sanity: ${error instanceof Error ? error.message : "Unknown error"}`,
+    };
+  }
+}
+
+export default async function AboutPage() {
+  const boardData = await getBoardMembers();
+  const boardMembers = boardData.members;
+  const usingFallback = boardData.reason !== undefined;
+
   return (
     <main className="min-h-screen bg-white">
       {/* Full‑width hero */}
@@ -184,56 +354,15 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Board of Directors */}
+      {/* Board of Directors - integrated feature */}
       <section id="board" className="py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-2xl md:text-3xl font-bold mb-6">
-            Board of Directors
-          </h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {BOARD.slice(0,4).map((m, i) => (
-              <UICard
-                key={m.name}
-                className={`overflow-hidden shadow-sm border-gray-200 transition-all ${
-                  i % 2 ? 'card-swoop-bl' : 'card-swoop-br'
-                } hover:shadow-lg hover:-translate-y-1`}
-              >
-                <div
-                  className="h-48 bg-gray-100"
-                  style={
-                    m.img
-                      ? {
-                          backgroundImage: `url(${m.img})`,
-                          backgroundSize: "cover",
-                          backgroundPosition: "center",
-                        }
-                      : {}
-                  }
-                  role="img"
-                  aria-label={`${m.name} headshot`}
-                />
-                <UICardContent className="p-5">
-                  <div className="font-semibold">{m.name}</div>
-                  <div className="text-gray-600 text-sm">{m.title}</div>
-                  <p className="mt-2 text-sm text-gray-600">{m.bio}</p>
-                  <div className="mt-3 flex items-center gap-3 text-gray-500">
-                    <a href="#" aria-label={`${m.name} on Facebook`} className="hover:text-rose-700">
-                      <Facebook className="h-4 w-4" />
-                    </a>
-                    <a href="#" aria-label={`${m.name} on Instagram`} className="hover:text-rose-700">
-                      <Instagram className="h-4 w-4" />
-                    </a>
-                    <a href="#" aria-label={`${m.name} on Twitter`} className="hover:text-rose-700">
-                      <Twitter className="h-4 w-4" />
-                    </a>
-                    <a href="#" aria-label={`${m.name} on LinkedIn`} className="hover:text-rose-700">
-                      <Linkedin className="h-4 w-4" />
-                    </a>
-                  </div>
-                </UICardContent>
-              </UICard>
-            ))}
-          </div>
+          {usingFallback && (
+            <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              {boardData.reason}
+            </div>
+          )}
+          <BoardMembersFeature members={boardMembers} />
         </div>
       </section>
 
@@ -252,11 +381,21 @@ export default function AboutPage() {
             {partners.map((p) => (
               <div
                 key={p.name}
-                className="h-16 rounded-xl bg-white border border-gray-200 shadow-sm grid place-items-center px-3"
+                className="h-24 rounded-xl bg-white border border-gray-200 shadow-sm grid place-items-center px-3"
               >
-                <span className="text-gray-700 text-sm font-medium">
-                  {p.name}
-                </span>
+                {p.img ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={p.img}
+                    alt={p.name}
+                    className="max-h-16 max-w-full object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="text-gray-700 text-sm font-medium">
+                    {p.name}
+                  </span>
+                )}
               </div>
             ))}
           </div>

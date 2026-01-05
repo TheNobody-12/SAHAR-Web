@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   title: "SAHAHR — South Asian Heritage Association of Hamilton & Region",
   description:
     "SAHAHR celebrates South Asian heritage in Hamilton & Region through cultural programs, community events, and support for youth, seniors, and newcomers.",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

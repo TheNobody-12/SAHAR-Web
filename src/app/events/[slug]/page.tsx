@@ -6,10 +6,10 @@ import { Calendar, MapPin, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { sanityFetch } from "@/lib/sanity";
 import { SanityEvent } from "@/lib/types";
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import { sanityClient } from "@/lib/sanity";
 
-type Props = { params: { slug: string } };
+type Props = { params: Promise<{ slug: string }> };
 
 const eventQuery = `
 *[_type == "event" && slug.current == $slug][0]{
@@ -30,9 +30,10 @@ const eventQuery = `
 }`;
 
 export default async function EventPage({ params }: Props) {
+  const { slug } = await params;
   const event = await sanityFetch<SanityEvent | null>({
     query: eventQuery,
-    params: { slug: params.slug },
+    params: { slug },
     revalidate: 300,
   });
 
@@ -79,15 +80,15 @@ export default async function EventPage({ params }: Props) {
       <article className="py-8">
         <div className="max-w-4xl mx-auto px-4 space-y-6">
           {event.image?.url && (
-            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100">
-              <Image
-                src={event.image.url}
-                alt={event.image.alt || `Event image for ${event.title}`}
-                fill
-                className="object-cover"
-                sizes="100vw"
-              />
-            </div>
+            <Image
+              src={event.image.url}
+              alt={event.image.alt || `Event image for ${event.title}`}
+              width={1600}
+              height={900}
+              className="w-full h-auto rounded-2xl bg-gray-100 object-contain"
+              sizes="(min-width: 1024px) 900px, 100vw"
+              priority
+            />
           )}
           {event.summary && (
             <p className="text-lg text-gray-800 leading-relaxed">{event.summary}</p>
@@ -133,4 +134,4 @@ const portableTextComponents = {
   },
 };
 
-const builder = imageUrlBuilder(sanityClient);
+const builder = createImageUrlBuilder(sanityClient);

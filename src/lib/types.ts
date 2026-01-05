@@ -38,6 +38,7 @@ export type SanityPost = {
   excerpt?: string | null;
   content?: PortableTextBlock[];
   coverImage?: SanityImage | null;
+  isNewsletter?: boolean;
 };
 
 export type SanityGalleryItem = {
