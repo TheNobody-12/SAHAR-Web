@@ -3,23 +3,7 @@ import { HomeClient } from "./home-client";
 import {
   SanityEvent,
   SanityImpactStat,
-  SanityProgram,
 } from "@/lib/types";
-
-const programsQuery = `
-*[_type == "program"] | order(title asc) {
-  _id,
-  title,
-  "slug": slug.current,
-  category,
-  summary,
-  ctaLabel,
-  ctaUrl,
-  "heroImage": {
-    "url": heroImage.asset->url,
-    "alt": coalesce(heroImage.alt, title)
-  }
-}`;
 
 const eventsQuery = `
 *[_type == "event"] | order(date asc)[0...3] {
@@ -47,15 +31,13 @@ type SiteSettings = {
 };
 
 export default async function SahahrLanding() {
-  const [programs, events, settings] = await Promise.all([
-    sanityFetch<SanityProgram[]>({ query: programsQuery, revalidate: 300 }),
+  const [events, settings] = await Promise.all([
     sanityFetch<SanityEvent[]>({ query: eventsQuery, revalidate: 300 }),
     sanityFetch<SiteSettings | null>({ query: statsQuery, revalidate: 600 }),
   ]);
 
   return (
     <HomeClient
-      programs={programs}
       events={events}
       stats={settings?.impactStats || []}
     />
