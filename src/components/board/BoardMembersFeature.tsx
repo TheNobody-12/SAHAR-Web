@@ -501,7 +501,7 @@ function MobileAccordionList({
                     open ? "" : "line-clamp-2"
                   )}
                 >
-                  {open ? getBioPreview(m.bio) : getBioPreview(m.bio)}
+                  {/* {open ? getBioPreview(m.bio) : getBioPreview(m.bio)} */}
                 </div>
               </div>
 
