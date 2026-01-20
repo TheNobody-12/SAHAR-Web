@@ -69,7 +69,7 @@ const FALLBACK_BOARD_MEMBERS: BoardMember[] = [
     name: "Member 2",
     role: "Vice President",
     img: "/images/avatar.svg",
-    bio: "Supports programs and governance.\n\nBorn and raised in Nepal, Kusum Bhatta is pursuing her Ph.D. in the School of Social Work at McMaster University, where she obtained her Master's degree in Gender Studies and Feminist Research. She is the co-chair of the Women's Committee, serving as a President of the Graduate Student Association, Vice President of CUPE 3906, and representing Social Sciences as a student senate representative at McMaster University. Her research and advocacy efforts draw attention to the essential contributions of immigrant aging women of color, who are often undervalued and unrecognized for their care work.",
+    bio: "Supports programs and governance.",
     order: 2,
     facebookUrl: "https://facebook.com",
     instagramUrl: "https://instagram.com",
