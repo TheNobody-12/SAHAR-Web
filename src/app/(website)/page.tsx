@@ -6,7 +6,7 @@ import {
 } from "@/lib/types";
 
 const eventsQuery = `
-*[_type == "event"] | order(date asc)[0...3] {
+*[_type == "event" && date >= now()] | order(featured desc, date asc)[0...3] {
   _id,
   title,
   "slug": slug.current,
@@ -32,7 +32,7 @@ type SiteSettings = {
 
 export default async function SahahrLanding() {
   const [events, settings] = await Promise.all([
-    sanityFetch<SanityEvent[]>({ query: eventsQuery, revalidate: 300 }),
+    sanityFetch<SanityEvent[]>({ query: eventsQuery, revalidate: 0 }),
     sanityFetch<SiteSettings | null>({ query: statsQuery, revalidate: 600 }),
   ]);
 

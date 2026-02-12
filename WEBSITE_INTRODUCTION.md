@@ -10,6 +10,7 @@ The **SAHAHR (South Asian Heritage Association of Hamilton & Region)** website i
 - **Next.js 15** - React-based framework with Server-Side Rendering (SSR) and Static Site Generation (SSG)
 - **React 19** - Modern React with latest features
 - **TypeScript** - Type-safe JavaScript for better development experience
+- **Sanity v3** - Headless CMS for managing dynamic content (Events, Board Members)
 
 ### Styling & UI Components
 - **Tailwind CSS 4** - Utility-first CSS framework for modern, responsive design
@@ -150,10 +151,9 @@ Subscription and feedback hub:
 - **Focus Management**: Keyboard navigation indicators
 
 ### Content Management
-- **Static Content**: Markdown-based content for easy updates
-- **Dynamic Forms**: Newsletter and feedback form handling
-- **Image Gallery**: Organized media management
-- **Event Management**: Structured event data with filtering
+- **Sanity Studio**: Embedded CMS at `/studio` for easy content updates
+- **Dynamic Content**: Events, Board Members, and Settings managed via Sanity
+- **Static Content**: Marketing pages using React components
 
 ## 🚀 Deployment & Development
 
@@ -168,10 +168,14 @@ npm run lint         # Run ESLint
 ### Project Structure
 ```
 src/
-├── app/             # Next.js App Router pages
+├── app/
+│   ├── (website)/   # Public website routes (Home, About, Events)
+│   ├── (studio)/    # Sanity Studio routes (Admin panel)
+│   └── layout.tsx   # Root layout
 ├── components/      # Reusable React components
-├── lib/            # Utility functions and data
-└── public/         # Static assets (images, documents)
+├── sanity/          # Sanity schemas and config
+├── lib/             # Utility functions and data
+└── public/          # Static assets (images, documents)
 ```
 
 ## 🎯 Target Audience
@@ -206,6 +210,8 @@ src/
 - **Social Media Integration**: Enhanced social sharing features
 
 ## 📞 Contact & Support
+
+For detailed instructions on managing content and maintaining the site, please refer to the [**Owner & Maintenance Guide**](./OWNER_DOCUMENTATION.md).
 
 For technical questions about the website or to suggest improvements, please contact the SAHAHR development team through the contact form on the website or reach out to the organization directly.
 

@@ -168,7 +168,7 @@ function buildBoardImageUrl(photo?: SanityBoardMember["photo"]) {
     })
     .width(800)
     .height(800)
-    .fit("crop")
+    .fit("max")
     .auto("format")
     .url();
 }

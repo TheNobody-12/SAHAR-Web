@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
@@ -13,6 +13,7 @@
     "@radix-ui/react-slot": "^1.2.3",
     "@sanity/client": "^7.13.1",
     "@sanity/image-url": "^2.0.2",
+    "@sanity/vision": "^3.99.0",
     "@vercel/analytics": "^1.6.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -20,8 +21,11 @@
     "groq": "^4.20.3",
     "lucide-react": "^0.544.0",
     "next": "15.5.9",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "next-sanity": "^9.12.3",
+    "react": "^19.2.2",
+    "react-dom": "^19.2.2",
+    "sanity": "^3.99.0",
+    "styled-components": "^6.3.9",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

@@ -24,7 +24,7 @@ type Props = {
 };
 
 export function HomeClient({ events, stats }: Props) {
-  const eventCards = events.length ? events : fallbackEvents;
+  const eventCards = events;
   const impactStats = stats.length ? stats : fallbackStats;
 
   return (
@@ -63,47 +63,49 @@ export function HomeClient({ events, stats }: Props) {
       </section>
 
       {/* Events */}
-      <section id="events" className="py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-8">Upcoming Events</h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            {eventCards.map((e, i) => (
-              <Card
-                key={e._id || e.title}
-                className={`overflow-hidden ${
-                  i % 2 ? "card-swoop-br" : "card-swoop-bl"
-                }`}
-              >
-                <div className="relative h-40 w-full">
-                  <Image
-                    src={e.image?.url || "/images/placeholder-event.svg"}
-                    alt={e.image?.alt || e.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <CardContent className="p-5">
-                  <div className="flex items-center gap-2 text-rose-700 font-medium mb-2">
-                    <Calendar className="h-4 w-4" /> {formatDate(e.date)}
+      {eventCards.length > 0 && (
+        <section id="events" className="py-16">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">Upcoming Events</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {eventCards.map((e, i) => (
+                <Card
+                  key={e._id || e.title}
+                  className={`overflow-hidden ${
+                    i % 2 ? "card-swoop-br" : "card-swoop-bl"
+                  }`}
+                >
+                  <div className="relative h-40 w-full">
+                    <Image
+                      src={e.image?.url || "/images/placeholder-event.svg"}
+                      alt={e.image?.alt || e.title}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                  <h3 className="font-semibold text-lg">{e.title}</h3>
-                  <p className="text-gray-600 mt-1">{e.summary}</p>
-                  <div className="mt-4 flex gap-2">
-                    <Button className="w-full" asChild>
-                      <Link href={e.registerUrl || "#"}>Register</Link>
-                    </Button>
-                    {e.slug && (
-                      <Button variant="outline" asChild className="w-full">
-                        <Link href={`/events/${e.slug}`}>Details</Link>
+                  <CardContent className="p-5">
+                    <div className="flex items-center gap-2 text-rose-700 font-medium mb-2">
+                      <Calendar className="h-4 w-4" /> {formatDate(e.date)}
+                    </div>
+                    <h3 className="font-semibold text-lg">{e.title}</h3>
+                    <p className="text-gray-600 mt-1">{e.summary}</p>
+                    <div className="mt-4 flex gap-2">
+                      <Button className="w-full" asChild>
+                        <Link href={e.registerUrl || "#"}>Register</Link>
                       </Button>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                      {e.slug && (
+                        <Button variant="outline" asChild className="w-full">
+                          <Link href={`/events/${e.slug}`}>Details</Link>
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Impact */}
       <section id="impact" className="py-16 bg-gray-50">
@@ -176,11 +178,7 @@ export function HomeClient({ events, stats }: Props) {
   );
 }
 
-const fallbackEvents: SanityEvent[] = [
-  { _id: "fallback-e1", title: "Spring Cultural Festival", date: "2025-04-12", summary: "A celebration of music, dance, and regional cuisines.", image: { url: "/images/event4.jpeg", alt: "Spring Cultural Festival" } },
-  { _id: "fallback-e2", title: "Volunteer Onboarding", date: "2025-05-04", summary: "Learn how to get involved and support our programs.", image: { url: "/images/event2.jpeg", alt: "Volunteer Onboarding" } },
-  { _id: "fallback-e3", title: "Heritage Story Night", date: "2025-06-20", summary: "Community storytelling and intergenerational dialogues.", image: { url: "/images/event7.jpeg", alt: "Heritage Story Night" } },
-];
+
 
 const fallbackStats: SanityImpactStat[] = [
   { value: "5k+", label: "Event Attendees" },

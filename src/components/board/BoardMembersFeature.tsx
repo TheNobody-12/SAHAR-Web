@@ -399,7 +399,7 @@ function MemberImageCard({
               src={img}
               alt={member.photoAlt || `${member.name} headshot`}
               fill
-              className="object-contain lg:object-cover"
+              className="object-contain object-top"
               sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
               priority={index < 4}
             />
@@ -481,7 +481,8 @@ function MobileAccordionList({
                   img
                     ? {
                         backgroundImage: `url(${img})`,
-                        backgroundSize: "cover",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                       }
                     : {}
@@ -706,7 +707,8 @@ export default function BoardMembersFeature({
                   active.img || active.photoUrl
                     ? {
                         backgroundImage: `url(${active.img ?? active.photoUrl})`,
-                        backgroundSize: "cover",
+                        backgroundSize: "contain",
+                        backgroundRepeat: "no-repeat",
                         backgroundPosition: "center",
                       }
                     : {}
