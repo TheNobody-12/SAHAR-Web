@@ -106,3 +106,7 @@ The site is configured for **Vercel**.
 
 **Issue: Dependency Conflicts**
 - **Fix**: Always use `--legacy-peer-deps` when installing new packages due to the mix of Next.js 15 and Sanity dependencies.
+
+**Issue: NPM Deprecation Warnings**
+- **Context**: You may see warnings like `npm warn deprecated glob@10.x` during installation.
+- **Action**: These are safe to ignore. They come from internal tools used by the Sanity CLI and do not affect the running website.

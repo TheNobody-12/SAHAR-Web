@@ -71,31 +71,36 @@ export function HomeClient({ events, stats }: Props) {
               {eventCards.map((e, i) => (
                 <Card
                   key={e._id || e.title}
-                  className={`overflow-hidden ${
+                  className={`overflow-hidden flex flex-col ${
                     i % 2 ? "card-swoop-br" : "card-swoop-bl"
                   }`}
                 >
-                  <div className="relative h-40 w-full">
+                  <Link
+                    href={e.slug ? `/events/${e.slug}` : (e.registerUrl || "#")}
+                    className="relative block h-64 w-full bg-gray-50 hover:opacity-90 transition-opacity"
+                  >
                     <Image
                       src={e.image?.url || "/images/placeholder-event.svg"}
                       alt={e.image?.alt || e.title}
                       fill
-                      className="object-cover"
+                      className="object-contain p-2"
                     />
-                  </div>
-                  <CardContent className="p-5">
+                  </Link>
+                  <CardContent className="p-5 flex-1 flex flex-col">
                     <div className="flex items-center gap-2 text-rose-700 font-medium mb-2">
                       <Calendar className="h-4 w-4" /> {formatDate(e.date)}
                     </div>
                     <h3 className="font-semibold text-lg">{e.title}</h3>
-                    <p className="text-gray-600 mt-1">{e.summary}</p>
+                    <p className="text-gray-600 mt-1 flex-1">{e.summary}</p>
                     <div className="mt-4 flex gap-2">
-                      <Button className="w-full" asChild>
-                        <Link href={e.registerUrl || "#"}>Register</Link>
-                      </Button>
+                      {e.registerUrl && (
+                        <Button className="flex-1" asChild>
+                          <Link href={e.registerUrl}>Register</Link>
+                        </Button>
+                      )}
                       {e.slug && (
-                        <Button variant="outline" asChild className="w-full">
-                          <Link href={`/events/${e.slug}`}>Details</Link>
+                        <Button variant={e.registerUrl ? "outline" : "default"} asChild className="flex-1">
+                          <Link href={`/events/${e.slug}`}>More Details</Link>
                         </Button>
                       )}
                     </div>
