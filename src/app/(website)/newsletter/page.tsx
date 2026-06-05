@@ -1,5 +1,6 @@
 import NewsletterForm from "@/components/newsletter-form";
 import FeedbackForm from "@/components/feedback-form";
+import RangoliDivider from "@/components/rangoli-divider";
 import { sanityFetch } from "@/lib/sanity";
 import type { SanityPost } from "@/lib/types";
 import Image from "next/image";
@@ -40,7 +41,7 @@ export default async function NewsletterPage() {
       </section>
 
       {/* Newsletter issues */}
-      <section className="py-12">
+      <section className="py-12 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4 space-y-6">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold">Latest Issues</h2>
@@ -96,6 +97,8 @@ export default async function NewsletterPage() {
           )}
         </div>
       </section>
+
+      <RangoliDivider />
 
       {/* Feedback */}
       <section className="py-12">

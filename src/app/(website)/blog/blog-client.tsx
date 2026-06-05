@@ -11,6 +11,7 @@ import {
   CardTitle as UICardTitle,
 } from "@/components/ui/card";
 import { SanityPost } from "@/lib/types";
+import RangoliDivider from "@/components/rangoli-divider";
 
 type Props = {
   posts: SanityPost[];
@@ -89,7 +90,7 @@ export function BlogClient({ posts }: Props) {
       </section>
 
       {/* List */}
-      <section className="py-10">
+      <section className="py-10 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((p) => (
             <UICard
@@ -139,6 +140,7 @@ export function BlogClient({ posts }: Props) {
           ))}
         </div>
       </section>
+      <RangoliDivider />
     </main>
   );
 }
