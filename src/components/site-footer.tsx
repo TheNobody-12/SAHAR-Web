@@ -1,5 +1,4 @@
 import NewsletterForm from "@/components/newsletter-form";
-import { Facebook, Instagram, Twitter, Youtube } from "lucide-react";
 import Link from "next/link";
 
 export function SiteFooter() {
@@ -20,22 +19,8 @@ export function SiteFooter() {
           <nav className="flex gap-3 text-sm text-white/70">
             <a href="#" className="hover:text-white">Privacy</a>
             <a href="#" className="hover:text-white">Accessibility</a>
-            <Link href="/#contact" className="hover:text-white">Contact</Link>
+            <Link href="/contact" className="hover:text-white">Contact</Link>
           </nav>
-          <div className="flex items-center gap-3">
-            <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="text-white/70 hover:text-white">
-              <Facebook className="h-5 w-5" />
-            </a>
-            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="text-white/70 hover:text-white">
-              <Instagram className="h-5 w-5" />
-            </a>
-            <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="text-white/70 hover:text-white">
-              <Twitter className="h-5 w-5" />
-            </a>
-            <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="text-white/70 hover:text-white">
-              <Youtube className="h-5 w-5" />
-            </a>
-          </div>
         </div>
       </div>
     </footer>

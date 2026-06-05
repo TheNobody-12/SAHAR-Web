@@ -282,7 +282,7 @@ export default async function AboutPage() {
       {/* About intro */}
       <section className="border-b">
         <div className="max-w-7xl mx-auto px-4 py-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold">About SAHAHR</h1>
+          <h2 className="text-3xl md:text-4xl font-extrabold">About SAHAHR</h2>
           <p className="text-gray-600 mt-3 max-w-3xl">
             South Asian Heritage Association of Hamilton and Region exists to educate, celebrate, and connect our community through programs that honor culture, language, and shared experiences.
           </p>
