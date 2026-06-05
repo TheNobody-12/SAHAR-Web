@@ -99,7 +99,7 @@ export function HomeClient({ events, stats }: Props) {
               <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
                 <Link href="/events">Explore Events</Link>
               </Button>
-              <Button asChild size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 hover:text-white">
+              <Button asChild size="lg" className="bg-transparent border border-white/40 text-white hover:bg-white/10 hover:text-white">
                 <Link href="/contact">Become a Member</Link>
               </Button>
             </div>
