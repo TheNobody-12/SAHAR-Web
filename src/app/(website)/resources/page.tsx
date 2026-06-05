@@ -1,6 +1,10 @@
+'use client';
+
+import { useState } from "react";
 import { Card as UICard, CardContent as UICardContent, CardHeader as UICardHeader, CardTitle as UICardTitle } from "@/components/ui/card";
 import NewsletterForm from "@/components/newsletter-form";
 import FeedbackForm from "@/components/feedback-form";
+import RangoliDivider from "@/components/rangoli-divider";
 
 type Resource = {
   title: string;
@@ -20,15 +24,19 @@ const RESOURCES: Resource[] = [
   { title: "Employment Supports", desc: "Job search and resume help for newcomers.", href: "https://www.ontario.ca/page/employment-ontario", category: "Settlement" },
 ];
 
-const CATS = ["Health", "Education", "Legal", "Settlement"] as const;
+const CATS = ["All", "Health", "Education", "Legal", "Settlement"] as const;
 
 export default function ResourcesPage() {
+  const [active, setActive] = useState<string>("All");
+
+  const filtered = active === "All" ? RESOURCES : RESOURCES.filter((r) => r.category === active);
+
   return (
     <main className="min-h-screen bg-white">
       <section className="border-b">
         <div className="max-w-7xl mx-auto px-4 py-10">
           <h1 className="text-3xl md:text-4xl font-extrabold">Community Resource Guide</h1>
-          <p className="text-gray-600 mt-2 max-w-3xl">Trusted links to health, education, legal, and settlement supports across Hamilton & Region. We’ll keep this list growing with your suggestions.</p>
+          <p className="text-gray-600 mt-2 max-w-3xl">Trusted links to health, education, legal, and settlement supports across Hamilton & Region.</p>
         </div>
       </section>
 
@@ -47,29 +55,54 @@ export default function ResourcesPage() {
         </div>
       </section>
 
-      {CATS.map((cat) => (
-        <section key={cat} className="py-10">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-2xl md:text-3xl font-bold mb-6">{cat}</h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {RESOURCES.filter((r) => r.category === cat).map((r) => (
-                <UICard key={r.title} className="rounded-2xl shadow-sm border-gray-200">
-                  <UICardHeader>
-                    <UICardTitle className="text-xl">{r.title}</UICardTitle>
-                  </UICardHeader>
-                  <UICardContent className="text-gray-700">
-                    <p>{r.desc}</p>
-                    <a href={r.href} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex text-primary hover:underline">Visit →</a>
-                  </UICardContent>
-                </UICard>
-              ))}
-            </div>
+      {/* Filter Tabs */}
+      <section className="py-10 bg-warm-ivory">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-wrap gap-2 mb-8">
+            {CATS.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActive(cat)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  active === cat
+                    ? "bg-rose-600 text-white"
+                    : "bg-white text-gray-700 border border-gray-200 hover:bg-rose-50 hover:text-rose-700"
+                }`}
+                aria-pressed={active === cat}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
-        </section>
-      ))}
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((r) => (
+              <UICard key={r.title} className="rounded-2xl shadow-sm border-gray-100 bg-white hover:shadow-md transition-shadow">
+                <UICardHeader>
+                  <UICardTitle className="text-xl">{r.title}</UICardTitle>
+                </UICardHeader>
+                <UICardContent className="text-gray-700">
+                  <p>{r.desc}</p>
+                  <a href={r.href} target="_blank" rel="noopener noreferrer" className="mt-4 inline-flex text-rose-700 font-medium hover:underline">
+                    Visit →
+                  </a>
+                </UICardContent>
+              </UICard>
+            ))}
+          </div>
+
+          {filtered.length === 0 && (
+            <div className="text-center text-gray-500 py-12">
+              No resources found in this category.
+            </div>
+          )}
+        </div>
+      </section>
+
+      <RangoliDivider />
 
       {/* Suggest a resource */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12">
         <div className="max-w-7xl mx-auto px-4">
           <FeedbackForm title="Suggest a resource" placeholder="Share a link and a short description…" />
         </div>
@@ -77,4 +110,3 @@ export default function ResourcesPage() {
     </main>
   );
 }
-
