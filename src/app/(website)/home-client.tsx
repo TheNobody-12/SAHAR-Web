@@ -116,9 +116,9 @@ export function HomeClient({ events, stats }: Props) {
           <div className="max-w-7xl mx-auto px-4 py-6">
             <p className="text-center text-white/50 text-sm mb-4">Supported by</p>
             <div className="flex flex-wrap items-center justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-              <span className="text-white/80 font-medium text-sm">City of Hamilton</span>
-              <span className="text-white/80 font-medium text-sm">CUPE 3906</span>
-              <span className="text-white/80 font-medium text-sm">McMaster GSA</span>
+              <img src="/sponsors/city-of-hamilton.png" alt="City of Hamilton" className="h-8 w-auto object-contain" />
+              <img src="/sponsors/cupe-3906.png" alt="CUPE 3906" className="h-8 w-auto object-contain" />
+              <img src="/sponsors/gsa-mcmaster.png" alt="McMaster GSA" className="h-8 w-auto object-contain" />
             </div>
           </div>
         </div>
