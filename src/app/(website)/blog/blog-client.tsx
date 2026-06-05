@@ -96,19 +96,17 @@ export function BlogClient({ posts }: Props) {
               key={p._id}
               className="rounded-2xl overflow-hidden hover:shadow-lg transition-shadow"
             >
-              <div className="relative w-full bg-gray-100">
+              <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden">
                 {p.coverImage?.url ? (
-                  <div className="relative w-full min-h-[200px]">
-                    <Image
-                      src={p.coverImage.url}
-                      alt={p.coverImage.alt || `Cover image for ${p.title}`}
-                      fill
-                      className="object-contain"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    />
-                  </div>
+                  <Image
+                    src={p.coverImage.url}
+                    alt={p.coverImage.alt || `Cover image for ${p.title}`}
+                    fill
+                    className="object-cover"
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                  />
                 ) : (
-                  <div className="h-44 w-full bg-gray-100" />
+                  <div className="h-full w-full bg-gray-100" />
                 )}
               </div>
               <UICardContent className="p-5">

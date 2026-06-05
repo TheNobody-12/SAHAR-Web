@@ -58,15 +58,16 @@ export default async function BlogPostPage({ params }: Props) {
       <article className="py-8">
         <div className="max-w-3xl mx-auto px-4 space-y-6">
           {post.coverImage?.url && (
-            <Image
-              src={post.coverImage.url}
-              alt={post.coverImage.alt || `Cover image for ${post.title}`}
-              width={1600}
-              height={900}
-              className="w-full h-auto rounded-2xl bg-gray-100 object-contain"
-              sizes="(min-width: 1024px) 900px, 100vw"
-              priority
-            />
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100">
+              <Image
+                src={post.coverImage.url}
+                alt={post.coverImage.alt || `Cover image for ${post.title}`}
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 900px, 100vw"
+                priority
+              />
+            </div>
           )}
           <div className="prose prose-lg max-w-none">
             <PortableText value={post.content || []} components={portableTextComponents} />

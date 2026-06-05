@@ -80,15 +80,16 @@ export default async function EventPage({ params }: Props) {
       <article className="py-8">
         <div className="max-w-4xl mx-auto px-4 space-y-6">
           {event.image?.url && (
-            <Image
-              src={event.image.url}
-              alt={event.image.alt || `Event image for ${event.title}`}
-              width={1600}
-              height={900}
-              className="w-full h-auto rounded-2xl bg-gray-100 object-contain"
-              sizes="(min-width: 1024px) 900px, 100vw"
-              priority
-            />
+            <div className="relative w-full aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100">
+              <Image
+                src={event.image.url}
+                alt={event.image.alt || `Event image for ${event.title}`}
+                fill
+                className="object-cover"
+                sizes="(min-width: 1024px) 900px, 100vw"
+                priority
+              />
+            </div>
           )}
           {event.summary && (
             <p className="text-lg text-gray-800 leading-relaxed">{event.summary}</p>

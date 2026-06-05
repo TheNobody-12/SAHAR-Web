@@ -58,18 +58,19 @@ export default async function NewsletterPage() {
                   key={n._id}
                   className="rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm hover:shadow-md transition"
                 >
-                  {n.coverImage?.url ? (
-                    <Image
-                      src={n.coverImage.url}
-                      alt={n.coverImage.alt || `Cover image for ${n.title}`}
-                      width={1200}
-                      height={675}
-                      className="w-full h-auto object-contain bg-white"
-                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    />
-                  ) : (
-                    <div className="h-44 w-full bg-gray-100" />
-                  )}
+                  <div className="relative w-full aspect-[16/9] bg-gray-100 overflow-hidden">
+                    {n.coverImage?.url ? (
+                      <Image
+                        src={n.coverImage.url}
+                        alt={n.coverImage.alt || `Cover image for ${n.title}`}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      />
+                    ) : (
+                      <div className="h-full w-full bg-gray-100" />
+                    )}
+                  </div>
                   <div className="p-5 space-y-2">
                     <div className="text-rose-700 font-medium text-sm">
                       {formatDate(n.date)}
