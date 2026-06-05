@@ -3,9 +3,10 @@
 import { useEffect, useRef, useState } from "react";
 import { useInView } from "framer-motion";
 
-function parseValue(input: string): { num: number; suffix: string } {
-  const match = input.match(/^(\d+(?:\.\d+)?)(.*)$/);
-  if (!match) return { num: 0, suffix: input };
+function parseValue(input: string | null | undefined): { num: number; suffix: string } {
+  const str = input ?? "";
+  const match = str.match(/^(\d+(?:\.\d+)?)(.*)$/);
+  if (!match) return { num: 0, suffix: str };
   return { num: parseFloat(match[1]), suffix: match[2] };
 }
 
@@ -14,7 +15,7 @@ export default function CountUp({
   duration = 2,
   className = "",
 }: {
-  value: string;
+  value: string | null | undefined;
   duration?: number;
   className?: string;
 }) {
