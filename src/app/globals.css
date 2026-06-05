@@ -158,9 +158,9 @@
     }
   }
   /* Typography scale */
-  h1 {@apply text-4xl md:text-6xl font-extrabold leading-tight;}
-  h2 {@apply text-3xl md:text-4xl font-bold leading-snug;}
-  h3 {@apply text-2xl md:text-3xl font-bold;}
+  h1 {@apply text-4xl md:text-6xl font-extrabold leading-tight; font-family: var(--font-playfair), var(--font-geist-sans), serif;}
+  h2 {@apply text-3xl md:text-4xl font-bold leading-snug; font-family: var(--font-playfair), var(--font-geist-sans), serif;}
+  h3 {@apply text-2xl md:text-3xl font-bold; font-family: var(--font-playfair), var(--font-geist-sans), serif;}
   h4 {@apply text-xl font-semibold;}
   h5 {@apply text-lg font-semibold;}
   h6 {@apply text-base font-semibold;}
@@ -173,6 +173,7 @@
   .card-swoop-bl { border-radius: 16px 48px 16px 16px; }
   .card-swoop-tr { border-radius: 48px 16px 16px 16px; }
   .card-swoop-tl { border-radius: 16px 16px 16px 48px; }
+  .bg-warm-ivory { background-color: #fffaf5; }
 }
 /* Hide Google default UI; we provide our own selector */
 .goog-te-banner-frame.skiptranslate { display: none !important; }
