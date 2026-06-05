@@ -64,57 +64,60 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero Banner */}
-      <section className="relative h-[50vh] md:h-[60vh]">
-        {event.image?.url ? (
-          <Image
-            src={event.image.url}
-            alt={event.image.alt || event.title}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-950 via-slate-900 to-rose-900" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
-        <div className="absolute inset-0 flex items-end">
-          <div className="max-w-4xl mx-auto px-4 py-10 w-full">
-            <Link href="/events" className="text-sm text-white/80 hover:text-white hover:underline mb-3 inline-block">
-              ← Back to Events
-            </Link>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow">{event.title}</h1>
-            <div className="flex flex-wrap gap-4 text-white/90 mt-4">
-              {event.date && (
-                <div className="inline-flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(event.date)}</span>
-                </div>
-              )}
-              {event.location && (
-                <div className="inline-flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>{event.location}</span>
-                </div>
-              )}
-              {event.category && (
-                <div className="inline-flex items-center gap-2">
-                  <Tag className="h-4 w-4" />
-                  <span>{event.category}</span>
-                </div>
-              )}
-            </div>
-            {event.registerUrl && (
-              <div className="mt-6">
-                <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-                  <a href={event.registerUrl} target="_blank" rel="noreferrer">Register for this event</a>
-                </Button>
+      {/* Header */}
+      <section className="border-b bg-gradient-to-br from-gray-950 via-slate-900 to-rose-900 text-white">
+        <div className="max-w-4xl mx-auto px-4 py-10">
+          <Link href="/events" className="text-sm text-white/80 hover:text-white hover:underline inline-flex items-center gap-1 mb-4">
+            ← Back to Events
+          </Link>
+          <h1 className="text-3xl md:text-5xl font-extrabold">{event.title}</h1>
+          <div className="flex flex-wrap gap-4 text-white/90 mt-4">
+            {event.date && (
+              <div className="inline-flex items-center gap-2">
+                <Calendar className="h-4 w-4" />
+                <span>{formatDate(event.date)}</span>
+              </div>
+            )}
+            {event.location && (
+              <div className="inline-flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                <span>{event.location}</span>
+              </div>
+            )}
+            {event.category && (
+              <div className="inline-flex items-center gap-2">
+                <Tag className="h-4 w-4" />
+                <span>{event.category}</span>
               </div>
             )}
           </div>
+          {event.registerUrl && (
+            <div className="mt-6">
+              <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
+                <a href={event.registerUrl} target="_blank" rel="noreferrer">Register for this event</a>
+              </Button>
+            </div>
+          )}
         </div>
       </section>
+
+      {/* Poster — full image, no crop */}
+      {event.image?.url && (
+        <section className="py-10 bg-gray-100">
+          <div className="max-w-3xl mx-auto px-4">
+            <Image
+              src={event.image.url}
+              alt={event.image.alt || `Event poster for ${event.title}`}
+              width={1200}
+              height={1600}
+              className="w-full h-auto rounded-2xl shadow-lg bg-white"
+              style={{ objectFit: "contain" }}
+              priority
+              sizes="(min-width: 1024px) 768px, 100vw"
+            />
+          </div>
+        </section>
+      )}
 
       {/* Content */}
       <article className="py-12">
