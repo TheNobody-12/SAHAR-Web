@@ -91,15 +91,15 @@ export function GalleryClient({ items }: Props) {
           {filtered.length === 0 ? (
             <div className="py-20 text-center text-gray-600">No images match your filters.</div>
           ) : (
-            <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <ul className="columns-2 sm:columns-3 lg:columns-4 gap-4 space-y-4">
               {filtered.map((img, i) => (
-                <li key={img._id} className="group relative">
+                <li key={img._id} className="group relative break-inside-avoid">
                   <button
                     className="block w-full overflow-hidden rounded-xl ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-primary"
                     onClick={() => setOpenIndex(i)}
                     aria-label={`View larger: ${img.alt || img.title}`}
                   >
-                    <FallbackImg src={img.image?.url || "/images/placeholder-event.svg"} alt={img.alt || img.title || "Gallery image"} />
+                    <MasonryImg src={img.image?.url || "/images/placeholder-event.svg"} alt={img.alt || img.title || "Gallery image"} />
                   </button>
                   <div className="mt-2 text-sm text-gray-700 line-clamp-2" aria-hidden>
                     {img.alt || img.title}
@@ -178,5 +178,32 @@ function FallbackImg({ src, alt }: { src: string; alt: string }) {
         />
       )}
     </div>
+  );
+}
+
+function MasonryImg({ src, alt }: { src: string; alt: string }) {
+  const [ok, setOk] = useState(true);
+  if (!ok) {
+    return (
+      <div className="relative w-full aspect-[4/3] bg-gray-100">
+        <Image
+          src="/images/placeholder-event.svg"
+          alt={`${alt} placeholder`}
+          fill
+          className="object-contain p-6 opacity-70"
+        />
+      </div>
+    );
+  }
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={600}
+      height={400}
+      className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105 bg-gray-100"
+      onError={() => setOk(false)}
+      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
+    />
   );
 }
