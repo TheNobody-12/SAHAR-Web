@@ -9,6 +9,12 @@ import {
   Globe2,
   HandHeart,
   BarChart3,
+  Music,
+  Heart,
+  BookOpen,
+  MapPin,
+  UsersRound,
+  Sparkles,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -17,11 +23,54 @@ import HeroMosaic from "@/components/hero-mosaic";
 import AuroraBackground from "@/components/aurora-background";
 import { SanityEvent, SanityImpactStat } from "@/lib/types";
 import FeedbackForm from "@/components/feedback-form";
+import RangoliDivider from "@/components/rangoli-divider";
+import CountUp from "@/components/count-up";
+import ProgramCard from "@/components/program-card";
+import TestimonialCard from "@/components/testimonial-card";
 
 type Props = {
   events: SanityEvent[];
   stats: SanityImpactStat[];
 };
+
+const programs = [
+  {
+    icon: Music,
+    title: "Cultural Festivals",
+    description:
+      "Mega festivals and community celebrations that bring together thousands to experience the richness of South Asian culture through music, dance, food, and art.",
+  },
+  {
+    icon: Sparkles,
+    title: "Youth Programs",
+    description:
+      "Leadership development, mentorship, and cultural education designed to help young people connect with their heritage while building skills for the future.",
+  },
+  {
+    icon: Heart,
+    title: "Senior Support",
+    description:
+      "Social connection and wellness activities that ensure our elders remain engaged, supported, and celebrated as vital members of the community.",
+  },
+  {
+    icon: MapPin,
+    title: "Newcomer Resources",
+    description:
+      "Settlement support and community navigation to help new arrivals find their footing, build networks, and feel at home in Hamilton.",
+  },
+  {
+    icon: BookOpen,
+    title: "Language & Arts",
+    description:
+      "Workshops in South Asian languages, classical music, traditional dance, and crafts that keep cultural knowledge alive across generations.",
+  },
+  {
+    icon: UsersRound,
+    title: "Volunteer Network",
+    description:
+      "Meaningful opportunities to give back, develop new skills, and build lasting friendships while supporting community initiatives.",
+  },
+];
 
 export function HomeClient({ events, stats }: Props) {
   const eventCards = events;
@@ -48,7 +97,10 @@ export function HomeClient({ events, stats }: Props) {
             </p>
             <div className="flex flex-wrap gap-3">
               <Button asChild size="lg" className="bg-white text-gray-900 hover:bg-gray-100">
-                <Link href="/events">See Upcoming Events</Link>
+                <Link href="/events">Explore Events</Link>
+              </Button>
+              <Button asChild size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10 hover:text-white">
+                <Link href="/contact">Become a Member</Link>
               </Button>
             </div>
             <div className="mt-6 flex items-center gap-3">
@@ -60,7 +112,41 @@ export function HomeClient({ events, stats }: Props) {
           </div>
           <HeroMosaic />
         </div>
+        <div className="relative z-10 border-t border-white/10 mt-8">
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <p className="text-center text-white/50 text-sm mb-4">Supported by</p>
+            <div className="flex flex-wrap items-center justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+              <span className="text-white/80 font-medium text-sm">City of Hamilton</span>
+              <span className="text-white/80 font-medium text-sm">CUPE 3906</span>
+              <span className="text-white/80 font-medium text-sm">McMaster GSA</span>
+            </div>
+          </div>
+        </div>
       </section>
+
+      {/* Programs */}
+      <section id="programs" className="py-16 bg-warm-ivory">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">Our Programs</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Building community through culture, education, and support for every generation.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {programs.map((p, i) => (
+              <ProgramCard
+                key={p.title}
+                icon={p.icon}
+                title={p.title}
+                description={p.description}
+                index={i}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+      <RangoliDivider />
 
       {/* Events */}
       {eventCards.length > 0 && (
@@ -77,13 +163,13 @@ export function HomeClient({ events, stats }: Props) {
                 >
                   <Link
                     href={e.slug ? `/events/${e.slug}` : (e.registerUrl || "#")}
-                    className="relative block h-64 w-full bg-gray-50 hover:opacity-90 transition-opacity"
+                    className="relative block w-full aspect-[4/3] bg-gray-100 hover:opacity-90 transition-opacity overflow-hidden"
                   >
                     <Image
                       src={e.image?.url || "/images/placeholder-event.svg"}
                       alt={e.image?.alt || e.title}
                       fill
-                      className="object-contain p-2"
+                      className="object-cover"
                     />
                   </Link>
                   <CardContent className="p-5 flex-1 flex flex-col">
@@ -113,7 +199,7 @@ export function HomeClient({ events, stats }: Props) {
       )}
 
       {/* Impact */}
-      <section id="impact" className="py-16 bg-gray-50">
+      <section id="impact" className="py-16 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold mb-10">
             Community Impact
@@ -122,15 +208,25 @@ export function HomeClient({ events, stats }: Props) {
             {impactStats.map((s, idx) => {
               const Icon = impactIcons[idx % impactIcons.length];
               return (
-                <Card key={`${s.label}-${s.value}-${idx}`} className="rounded-2xl text-center shadow-sm border-gray-100">
-                  <CardContent className="p-6 space-y-3">
-                    <div className="mx-auto h-11 w-11 rounded-xl bg-rose-50 text-rose-700 grid place-items-center">
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div className="text-4xl font-extrabold">{s.value}</div>
-                    <div className="text-gray-600">{s.label}</div>
-                  </CardContent>
-                </Card>
+                <motion.div
+                  key={`${s.label}-${s.value}-${idx}`}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.1 }}
+                >
+                  <Card className="rounded-2xl text-center shadow-sm border-gray-100 bg-white">
+                    <CardContent className="p-6 space-y-3">
+                      <div className="mx-auto h-11 w-11 rounded-xl bg-rose-50 text-rose-700 grid place-items-center">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <div className="text-4xl font-extrabold" style={{ fontFamily: "var(--font-playfair), serif" }}>
+                        <CountUp value={s.value} />
+                      </div>
+                      <div className="text-gray-600">{s.label}</div>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               );
             })}
           </div>
@@ -144,15 +240,14 @@ export function HomeClient({ events, stats }: Props) {
             Stories from Our Community
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
-            {testimonials.map((t) => (
-              <Card key={t.name} className="rounded-2xl shadow-sm border-gray-100">
-                <CardContent className="p-6 space-y-3">
-                  <p className="text-lg leading-relaxed text-gray-700">“{t.quote}”</p>
-                  <div className="text-sm text-gray-600">
-                    {t.name} · {t.context}
-                  </div>
-                </CardContent>
-              </Card>
+            {testimonials.map((t, i) => (
+              <TestimonialCard
+                key={t.name}
+                quote={t.quote}
+                name={t.name}
+                context={t.context}
+                index={i}
+              />
             ))}
           </div>
         </div>
@@ -182,8 +277,6 @@ export function HomeClient({ events, stats }: Props) {
     </div>
   );
 }
-
-
 
 const fallbackStats: SanityImpactStat[] = [
   { value: "5k+", label: "Event Attendees" },
