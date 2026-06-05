@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
+import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 
 /**
  * Board Members UI Feature (matches your UICard design)
@@ -568,10 +569,10 @@ export default function BoardMembersFeature({
   const CardContent = components?.UICardContent ?? FallbackCardContent;
 
   const resolvedIcons: Required<ExternalIcons> = {
-    Facebook: icons?.Facebook ?? ((p) => <FacebookFallback {...p} />),
-    Instagram: icons?.Instagram ?? ((p) => <InstagramFallback {...p} />),
-    Twitter: icons?.Twitter ?? ((p) => <TwitterFallback {...p} />),
-    Linkedin: icons?.Linkedin ?? ((p) => <LinkedinFallback {...p} />),
+    Facebook: icons?.Facebook ?? Facebook,
+    Instagram: icons?.Instagram ?? Instagram,
+    Twitter: icons?.Twitter ?? Twitter,
+    Linkedin: icons?.Linkedin ?? Linkedin,
   };
 
   const { executive, board } = useMemo(() => {
