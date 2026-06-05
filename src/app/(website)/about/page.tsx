@@ -11,7 +11,7 @@ import RangoliDivider from "@/components/rangoli-divider";
 import BoardMembersFeature, { type BoardMember, type SanityBoardMember } from "@/components/board/BoardMembersFeature";
 import { sanityClient, sanityFetch } from "@/lib/sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
-import { HandHeart, Users, Globe2 } from "lucide-react";
+import { HandHeart, Users, Globe2, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
@@ -356,14 +356,17 @@ export default async function AboutPage() {
       </section>
 
       {/* Board of Directors - integrated feature */}
-      <section id="board" className="py-12">
+      <section id="board" className="py-12 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4">
           {usingFallback && (
             <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
               {boardData.reason}
             </div>
           )}
-          <BoardMembersFeature members={boardMembers} />
+          <BoardMembersFeature
+            members={boardMembers}
+            icons={{ Facebook, Instagram, Twitter, Linkedin }}
+          />
         </div>
       </section>
 
