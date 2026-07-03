@@ -46,8 +46,13 @@ export type SanityGalleryItem = {
   title: string;
   slug?: string | null;
   category?: string | null;
+  cultureGroup?: string | null;
   alt?: string | null;
   image?: SanityImage | null;
+  mediaType?: "image" | "video_url" | "video_file" | null;
+  videoUrl?: string | null;
+  videoFileUrl?: string | null;
+  eventName?: string | null;
 };
 
 export type SanityResource = {

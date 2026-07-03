@@ -7,6 +7,7 @@ import {
   CardTitle as UICardTitle,
 } from "@/components/ui/card";
 import Carousel from "@/components/carousel";
+import RangoliDivider from "@/components/rangoli-divider";
 import BoardMembersFeature, { type BoardMember, type SanityBoardMember } from "@/components/board/BoardMembersFeature";
 import { sanityClient, sanityFetch } from "@/lib/sanity";
 import { createImageUrlBuilder } from "@sanity/image-url";
@@ -282,7 +283,7 @@ export default async function AboutPage() {
       {/* About intro */}
       <section className="border-b">
         <div className="max-w-7xl mx-auto px-4 py-12">
-          <h1 className="text-3xl md:text-4xl font-extrabold">About SAHAHR</h1>
+          <h2 className="text-3xl md:text-4xl font-extrabold">About SAHAHR</h2>
           <p className="text-gray-600 mt-3 max-w-3xl">
             South Asian Heritage Association of Hamilton and Region exists to educate, celebrate, and connect our community through programs that honor culture, language, and shared experiences.
           </p>
@@ -290,7 +291,7 @@ export default async function AboutPage() {
       </section>
 
       {/* Mission & Values */}
-      <section id="mission" className="py-12 bg-gray-50">
+      <section id="mission" className="py-12 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-6">
           {missionCards.map((m) => (
             <UICard key={m.title} className="rounded-2xl shadow-sm border-gray-100">
@@ -355,7 +356,7 @@ export default async function AboutPage() {
       </section>
 
       {/* Board of Directors - integrated feature */}
-      <section id="board" className="py-12">
+      <section id="board" className="py-12 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4">
           {usingFallback && (
             <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
@@ -366,8 +367,10 @@ export default async function AboutPage() {
         </div>
       </section>
 
+      <RangoliDivider />
+
       {/* Partners */}
-      <section className="py-12 bg-gray-50">
+      <section className="py-12 bg-warm-ivory">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl md:text-3xl font-bold">

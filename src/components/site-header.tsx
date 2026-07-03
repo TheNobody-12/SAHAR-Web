@@ -88,7 +88,7 @@ export function SiteHeader() {
               >
                 <Link
                   href={m.href}
-                  className="inline-flex items-center gap-1 text-white/85 hover:text-primary focus:outline-none"
+                  className="inline-flex items-center gap-1 text-white/85 hover:text-white focus:outline-none"
                   aria-haspopup={m.items ? "menu" : undefined}
                   aria-expanded={m.items ? isOpen : undefined}
                   onFocus={() => setOpenKey(key)}
@@ -140,7 +140,9 @@ export function SiteHeader() {
         {/* Right actions */}
         <div className="flex items-center gap-3">
           <LanguageSwitcher />
-          <Button>Donate</Button>
+          <Button asChild>
+            <Link href="/contact">Donate</Link>
+          </Button>
           <button
             className="md:hidden inline-flex items-center justify-center h-11 w-11 rounded-md border"
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
@@ -159,32 +161,41 @@ export function SiteHeader() {
               const key = m.label.toLowerCase().replace(/\s+/g, "-");
               const isOpen = openKey === key;
               return (
-                <div key={key} className="">
-                  <button
-                    className="w-full flex items-center justify-between py-2 text-left"
-                    aria-haspopup="menu"
-                    aria-expanded={isOpen}
-                    onClick={() => setOpenKey(isOpen ? null : key)}
-                  >
-                    <Link href={m.href} className="hover:text-primary" onClick={() => setMobileOpen(false)}>
+                <div key={key}>
+                  {m.items ? (
+                    <div>
+                      <div className="flex items-center justify-between py-2">
+                        <Link href={m.href} className="hover:text-white" onClick={() => setMobileOpen(false)}>
+                          {m.label}
+                        </Link>
+                        <button
+                          aria-label={isOpen ? `Collapse ${m.label} menu` : `Expand ${m.label} menu`}
+                          onClick={() => setOpenKey(isOpen ? null : key)}
+                          className="inline-flex items-center justify-center h-8 w-8 rounded-md"
+                        >
+                          <ChevronDown className={`h-4 w-4 transition ${isOpen ? "rotate-180" : ""}`} aria-hidden />
+                        </button>
+                      </div>
+                      {isOpen && (
+                        <div role="menu" className="pl-3 pb-2 space-y-1">
+                          {m.items.map((it) => (
+                            <Link
+                              key={it.label}
+                              href={it.href}
+                              role="menuitem"
+                              className="block rounded-md px-3 py-2 text-sm hover:bg-rose-50 hover:text-rose-700"
+                              onClick={() => setMobileOpen(false)}
+                            >
+                              {it.label}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <Link href={m.href} className="block py-2 hover:text-white" onClick={() => setMobileOpen(false)}>
                       {m.label}
                     </Link>
-                    {m.items && <ChevronDown className={`h-4 w-4 transition ${isOpen ? "rotate-180" : ""}`} aria-hidden />}
-                  </button>
-                  {m.items && isOpen && (
-                    <div role="menu" className="pl-3 pb-2 space-y-1">
-                      {m.items.map((it) => (
-                        <Link
-                          key={it.label}
-                          href={it.href}
-                          role="menuitem"
-                          className="block rounded-md px-3 py-2 text-sm hover:bg-rose-50 hover:text-rose-700"
-                          onClick={() => setMobileOpen(false)}
-                        >
-                          {it.label}
-                        </Link>
-                      ))}
-                    </div>
                   )}
                 </div>
               );

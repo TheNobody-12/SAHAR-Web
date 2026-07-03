@@ -138,26 +138,22 @@ export function EventsClient({ events }: Props) {
                     key={e._id}
                     className="rounded-2xl overflow-hidden hover:shadow-lg transition-shadow flex flex-col"
                   >
-                  <div className="relative w-full bg-gray-100">
+                  <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden">
                     {e.image?.url ? (
-                      <div className="relative w-full min-h-[200px]">
-                        <Image
-                          src={e.image.url}
-                          alt={e.image.alt || e.title}
-                          fill
-                          className="object-contain lg:object-cover"
-                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                        />
-                      </div>
+                      <Image
+                        src={e.image.url}
+                        alt={e.image.alt || e.title}
+                        fill
+                        className="object-cover"
+                        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      />
                     ) : (
-                      <div className="relative w-full min-h-[200px]">
-                        <Image
-                          src="/images/placeholder-event.svg"
-                          alt={`${e.title} placeholder image`}
-                          fill
-                          className="object-contain p-6 opacity-70"
-                        />
-                      </div>
+                      <Image
+                        src="/images/placeholder-event.svg"
+                        alt={`${e.title} placeholder image`}
+                        fill
+                        className="object-contain p-6 opacity-70"
+                      />
                     )}
                   </div>
                   <UICardContent className="p-5 flex-1 flex flex-col">
