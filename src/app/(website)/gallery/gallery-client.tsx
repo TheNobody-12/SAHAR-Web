@@ -1,11 +1,23 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, useRef } from "react";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Play } from "lucide-react";
 import { SanityGalleryItem } from "@/lib/types";
+
+function getEmbedUrl(url: string) {
+  if (url.includes("youtube.com") || url.includes("youtu.be")) {
+    const videoId = url.split("v=")[1]?.split("&")[0] || url.split("youtu.be/")[1]?.split("?")[0];
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+  }
+  if (url.includes("vimeo.com")) {
+    const videoId = url.split("vimeo.com/")[1]?.split("?")[0];
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+  }
+  return url;
+}
 
 type Props = {
   items: SanityGalleryItem[];
@@ -14,11 +26,23 @@ type Props = {
 export function GalleryClient({ items }: Props) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("All");
+  const [cultureGroup, setCultureGroup] = useState<string>("All");
+  const [eventName, setEventName] = useState<string>("All");
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const categories = useMemo(() => {
     const cats = Array.from(new Set(items.map((i) => i.category).filter(Boolean) as string[]));
     return ["All", ...cats];
+  }, [items]);
+
+  const cultureGroups = useMemo(() => {
+    const groups = Array.from(new Set(items.map((i) => i.cultureGroup).filter(Boolean) as string[]));
+    return ["All", ...groups];
+  }, [items]);
+
+  const eventNames = useMemo(() => {
+    const events = Array.from(new Set(items.map((i) => i.eventName).filter(Boolean) as string[]));
+    return ["All", ...events];
   }, [items]);
 
   const filtered = useMemo(() => {
@@ -27,9 +51,11 @@ export function GalleryClient({ items }: Props) {
         ? [img.title, img.alt].filter(Boolean).join(" ").toLowerCase().includes(query.toLowerCase())
         : true;
       const matchC = category === "All" || img.category === category;
-      return matchQ && matchC;
+      const matchCulture = cultureGroup === "All" || img.cultureGroup === cultureGroup;
+      const matchEvent = eventName === "All" || img.eventName === eventName;
+      return matchQ && matchC && matchCulture && matchEvent;
     });
-  }, [items, query, category]);
+  }, [items, query, category, cultureGroup, eventName]);
 
   const next = useCallback(() => {
     setOpenIndex((i) => (i === null ? 0 : (i + 1) % filtered.length));
@@ -38,15 +64,28 @@ export function GalleryClient({ items }: Props) {
     setOpenIndex((i) => (i === null ? 0 : (i - 1 + filtered.length) % filtered.length));
   }, [filtered.length]);
 
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    if (openIndex !== null) {
+      if (!dialog.open) dialog.showModal();
+    } else {
+      if (dialog.open) dialog.close();
+    }
+  }, [openIndex]);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpenIndex(null);
+      if (openIndex === null) return;
       if (e.key === "ArrowLeft") prev();
       if (e.key === "ArrowRight") next();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [next, prev]);
+  }, [next, prev, openIndex]);
 
   return (
     <main className="min-h-screen bg-white">
@@ -59,17 +98,17 @@ export function GalleryClient({ items }: Props) {
 
       {/* Filters */}
       <section className="bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row gap-4 md:items-end">
-          <div className="md:flex-1">
+        <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+          <div className="md:col-span-1">
             <label className="text-sm font-medium" htmlFor="gallery-search">Search</label>
             <Input
               id="gallery-search"
-              placeholder="Search photos (e.g., dance, food)"
+              placeholder="Search (e.g., dance)"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-          <div className="md:w-64">
+          <div>
             <label className="text-sm font-medium" htmlFor="gallery-category">Category</label>
             <select
               id="gallery-category"
@@ -82,6 +121,36 @@ export function GalleryClient({ items }: Props) {
               ))}
             </select>
           </div>
+          {cultureGroups.length > 1 && (
+            <div>
+              <label className="text-sm font-medium" htmlFor="gallery-culture">Culture</label>
+              <select
+                id="gallery-culture"
+                className="mt-1 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                value={cultureGroup}
+                onChange={(e) => setCultureGroup(e.target.value)}
+              >
+                {cultureGroups.map((c) => (
+                  <option key={c}>{c}</option>
+                ))}
+              </select>
+            </div>
+          )}
+          {eventNames.length > 1 && (
+            <div>
+              <label className="text-sm font-medium" htmlFor="gallery-event">Event</label>
+              <select
+                id="gallery-event"
+                className="mt-1 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                value={eventName}
+                onChange={(e) => setEventName(e.target.value)}
+              >
+                {eventNames.map((e) => (
+                  <option key={e}>{e}</option>
+                ))}
+              </select>
+            </div>
+          )}
         </div>
       </section>
 
@@ -95,14 +164,26 @@ export function GalleryClient({ items }: Props) {
               {filtered.map((img, i) => (
                 <li key={img._id} className="group relative break-inside-avoid">
                   <button
-                    className="block w-full overflow-hidden rounded-xl ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="block w-full overflow-hidden rounded-xl ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-primary relative"
                     onClick={() => setOpenIndex(i)}
                     aria-label={`View larger: ${img.alt || img.title}`}
                   >
                     <MasonryImg src={img.image?.url || "/images/placeholder-event.svg"} alt={img.alt || img.title || "Gallery image"} />
+                    {img.mediaType && img.mediaType !== "image" && (
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
+                        <div className="bg-white/90 rounded-full p-3 shadow-lg flex items-center justify-center">
+                          <Play className="w-6 h-6 text-black ml-1" />
+                        </div>
+                      </div>
+                    )}
                   </button>
                   <div className="mt-2 text-sm text-gray-700 line-clamp-2" aria-hidden>
-                    {img.alt || img.title}
+                    <span className="font-medium">{img.title}</span>
+                    {(img.cultureGroup || img.eventName) && (
+                      <span className="text-gray-500 block text-xs mt-0.5">
+                        {[img.cultureGroup, img.eventName].filter(Boolean).join(" • ")}
+                      </span>
+                    )}
                   </div>
                 </li>
               ))}
@@ -112,34 +193,54 @@ export function GalleryClient({ items }: Props) {
       </section>
 
       {/* Lightbox */}
-      {openIndex !== null && filtered[openIndex] && (
-        <div
-          role="dialog"
-          aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
-          onClick={() => setOpenIndex(null)}
-        >
-          <div className="relative w-full max-w-5xl" onClick={(e) => e.stopPropagation()}>
-            <button
-              aria-label="Close"
-              onClick={() => setOpenIndex(null)}
-              className="absolute -top-2 -right-2 z-10 grid place-items-center h-10 w-10 rounded-full bg-black/60 text-white hover:bg-black/80"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            <div className="relative w-full aspect-[16/10] bg-gray-900 rounded-2xl overflow-hidden">
-              <Image
-                src={filtered[openIndex].image?.url || "/images/placeholder-event.svg"}
-                alt={filtered[openIndex].alt || filtered[openIndex].title || "Gallery image"}
-                fill
-                className="object-contain"
-                priority
-                sizes="100vw"
-              />
+      <dialog
+        ref={dialogRef}
+        onClose={() => setOpenIndex(null)}
+        onClick={(e) => {
+          if (e.target === dialogRef.current) setOpenIndex(null);
+        }}
+        className="m-auto bg-transparent p-4 backdrop:bg-black/80 max-w-5xl w-full"
+      >
+        {openIndex !== null && filtered[openIndex] && (
+          <div className="relative w-full">
+            <form method="dialog">
+              <button
+                aria-label="Close"
+                className="absolute top-3 right-3 z-10 grid place-items-center h-10 w-10 rounded-full bg-black/60 text-white hover:bg-black/80"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </form>
+            <div className="relative w-full aspect-[16/10] bg-gray-900 rounded-2xl overflow-hidden flex items-center justify-center shadow-2xl">
+              {filtered[openIndex].mediaType === "video_url" && filtered[openIndex].videoUrl ? (
+                <iframe
+                  src={getEmbedUrl(filtered[openIndex].videoUrl!)}
+                  className="w-full h-full"
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                  title={filtered[openIndex].title || "Video player"}
+                ></iframe>
+              ) : filtered[openIndex].mediaType === "video_file" && filtered[openIndex].videoFileUrl ? (
+                <video
+                  src={filtered[openIndex].videoFileUrl!}
+                  controls
+                  className="w-full h-full object-contain"
+                  autoPlay
+                ></video>
+              ) : (
+                <Image
+                  src={filtered[openIndex].image?.url || "/images/placeholder-event.svg"}
+                  alt={filtered[openIndex].alt || filtered[openIndex].title || "Gallery image"}
+                  fill
+                  className="object-contain"
+                  priority
+                  sizes="100vw"
+                />
+              )}
             </div>
-            <div className="mt-3 flex items-center justify-between text-white/90">
-              <p className="text-sm md:text-base">
-                {filtered[openIndex].alt || filtered[openIndex].title}
+            <div className="mt-4 flex items-center justify-between text-white/90">
+              <p className="text-sm md:text-base font-medium drop-shadow-md">
+                {filtered[openIndex].title}
               </p>
               <div className="flex gap-2">
                 <Button variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20" onClick={prev} aria-label="Previous image">
@@ -151,33 +252,9 @@ export function GalleryClient({ items }: Props) {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </dialog>
     </main>
-  );
-}
-
-function FallbackImg({ src, alt }: { src: string; alt: string }) {
-  const [ok, setOk] = useState(true);
-  return (
-    <div className="relative w-full aspect-[4/3] bg-gray-100">
-      {ok ? (
-        <Image
-          src={src}
-          alt={alt}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
-          onError={() => setOk(false)}
-        />
-      ) : (
-        <Image
-          src="/images/placeholder-event.svg"
-          alt={`${alt} placeholder`}
-          fill
-          className="object-contain p-6 opacity-70"
-        />
-      )}
-    </div>
   );
 }
 

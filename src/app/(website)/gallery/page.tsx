@@ -8,6 +8,11 @@ const galleryQuery = `
   title,
   "slug": slug.current,
   category,
+  cultureGroup,
+  mediaType,
+  videoUrl,
+  "videoFileUrl": videoFile.asset->url,
+  "eventName": event->title,
   "alt": coalesce(alt, title),
   "image": {
     "url": image.asset->url,
