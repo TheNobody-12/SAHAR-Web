@@ -44,7 +44,7 @@ export default async function NewsletterPage() {
         <div className="max-w-7xl mx-auto px-4 space-y-6">
           <div>
             <h2 className="text-2xl md:text-3xl font-bold">Latest Issues</h2>
-            <p className="text-gray-600 mt-2">Check out our latest newsletters and stay updated with what's happening in our community.</p>
+            <p className="text-gray-600 mt-2">Check out our latest newsletters and stay updated with what&apos;s happening in our community.</p>
           </div>
 
           {newsletters.length === 0 ? (

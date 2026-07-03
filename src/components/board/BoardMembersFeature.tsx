@@ -222,60 +222,6 @@ function FallbackCardContent(props: React.ComponentProps<"div">) {
   return <div {...props} />;
 }
 
-// --------- Fallback Icons (if you don't pass lucide icons) ---------
-function Icon({ children }: { children: React.ReactNode }) {
-  return (
-    <span
-      className="inline-flex h-4 w-4 items-center justify-center"
-      aria-hidden
-    >
-      <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current">
-        {children}
-      </svg>
-    </span>
-  );
-}
-
-function FacebookFallback({ className }: { className?: string }) {
-  return (
-    <span className={className}>
-      <Icon>
-        <path d="M13.5 22v-8h2.7l.4-3H13.5V9.1c0-.9.2-1.5 1.6-1.5H16.7V5c-.3 0-1.4-.1-2.6-.1-2.6 0-4.4 1.6-4.4 4.5V11H7v3h2.7v8h3.8z" />
-      </Icon>
-    </span>
-  );
-}
-
-function InstagramFallback({ className }: { className?: string }) {
-  return (
-    <span className={className}>
-      <Icon>
-        <path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm10 2H7a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3zm-5 4a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6zm5.2-.7a1.1 1.1 0 110 2.2 1.1 1.1 0 010-2.2z" />
-      </Icon>
-    </span>
-  );
-}
-
-function TwitterFallback({ className }: { className?: string }) {
-  return (
-    <span className={className}>
-      <Icon>
-        <path d="M22 5.8c-.7.3-1.4.5-2.2.6.8-.5 1.3-1.2 1.6-2.1-.7.4-1.6.7-2.4.9A3.7 3.7 0 0012.6 8c0 .3 0 .6.1.8-3-.2-5.7-1.6-7.4-3.9-.3.6-.5 1.2-.5 1.9 0 1.3.7 2.5 1.7 3.2-.6 0-1.2-.2-1.7-.5v.1c0 1.9 1.4 3.5 3.3 3.9-.4.1-.8.2-1.2.2-.3 0-.6 0-.8-.1.6 1.7 2.2 2.9 4.1 2.9A7.5 7.5 0 012 18.4 10.6 10.6 0 007.7 20c6.9 0 10.7-5.8 10.7-10.7v-.5c.7-.5 1.3-1.1 1.8-1.8z" />
-      </Icon>
-    </span>
-  );
-}
-
-function LinkedinFallback({ className }: { className?: string }) {
-  return (
-    <span className={className}>
-      <Icon>
-        <path d="M6.5 7.2A1.7 1.7 0 116.5 4a1.7 1.7 0 010 3.2zM5 20h3V9H5v11zm5-11h2.9v1.5h.1c.4-.8 1.5-1.6 3.1-1.6 3.3 0 3.9 2.2 3.9 5v6.1h-3v-5.4c0-1.3 0-2.9-1.8-2.9-1.8 0-2.1 1.4-2.1 2.8V20h-3V9z" />
-      </Icon>
-    </span>
-  );
-}
-
 type SocialKind = "facebook" | "instagram" | "twitter" | "linkedin";
 
 function SocialLink({

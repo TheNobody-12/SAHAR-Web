@@ -116,9 +116,30 @@ export function HomeClient({ events, stats }: Props) {
           <div className="max-w-7xl mx-auto px-4 py-6">
             <p className="text-center text-white/50 text-sm mb-4">Supported by</p>
             <div className="flex flex-wrap items-center justify-center gap-8 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-              <img src="/sponsors/city-of-hamilton.png" alt="City of Hamilton" className="h-12 w-auto object-contain" />
-              <img src="/sponsors/cupe-3906.png" alt="CUPE 3906" className="h-12 w-auto object-contain" />
-              <img src="/sponsors/gsa-mcmaster.png" alt="McMaster GSA" className="h-12 w-auto object-contain" />
+              <Image
+                src="/sponsors/city-of-hamilton.png"
+                alt="City of Hamilton"
+                width={200}
+                height={48}
+                className="h-12 w-auto object-contain"
+                unoptimized
+              />
+              <Image
+                src="/sponsors/cupe-3906.png"
+                alt="CUPE 3906"
+                width={200}
+                height={48}
+                className="h-12 w-auto object-contain"
+                unoptimized
+              />
+              <Image
+                src="/sponsors/gsa-mcmaster.png"
+                alt="McMaster GSA"
+                width={200}
+                height={48}
+                className="h-12 w-auto object-contain"
+                unoptimized
+              />
             </div>
           </div>
         </div>
