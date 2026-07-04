@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useClient } from "sanity";
 import {
   Box,
-  Button,
   Card,
   Grid,
   Heading,
@@ -15,28 +14,38 @@ import {
 } from "@sanity/ui";
 
 const CATEGORY_OPTIONS = [
-  { title: "Performance", value: "Performance" },
-  { title: "Festival", value: "Festival" },
-  { title: "Workshop", value: "Workshop" },
+  { title: "Events", value: "Events" },
+  { title: "Culture", value: "Culture" },
   { title: "Community", value: "Community" },
-  { title: "Other", value: "Other" },
+  { title: "Food", value: "Food" },
+  { title: "People", value: "People" },
 ];
 
 type EventOption = { _id: string; title: string };
 
-export default function BulkImageUploadTool() {
+function useEvents() {
   const client = useClient({ apiVersion: "2024-02-05" });
   const [events, setEvents] = useState<EventOption[]>([]);
-  const [category, setCategory] = useState<string>("");
-  const [cultureGroup, setCultureGroup] = useState<string>("");
-  const [eventId, setEventId] = useState<string>("");
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     client
       .fetch<EventOption[]>(`*[_type == "event"] | order(date desc) { _id, title }`)
       .then(setEvents)
-      .catch(console.error);
+      .catch((err) => {
+        console.error("Failed to load events", err);
+        setError("Could not load events. Please try again.");
+      });
   }, [client]);
+
+  return { events, error };
+}
+
+export default function BulkImageUploadTool() {
+  const { events, error: eventsError } = useEvents();
+  const [category, setCategory] = useState<string>("");
+  const [cultureGroup, setCultureGroup] = useState<string>("");
+  const [eventId, setEventId] = useState<string>("");
 
   return (
     <Box padding={4}>
@@ -88,6 +97,11 @@ export default function BulkImageUploadTool() {
                     </option>
                   ))}
                 </Select>
+                {eventsError && (
+                  <Text size={1} style={{ color: "var(--card-critical-fg-color)" }}>
+                    {eventsError}
+                  </Text>
+                )}
               </Stack>
             </Grid>
           </Stack>
