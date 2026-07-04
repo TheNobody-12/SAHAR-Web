@@ -7,7 +7,9 @@
 import {visionTool} from '@sanity/vision'
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
+import { ImagesIcon } from "@sanity/icons";
 import { schemaTypes } from "./src/sanity/schemaTypes";
+import BulkImageUploadTool from "./src/sanity/components/BulkImageUploadTool";
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "ps1r2kj3"
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production"
@@ -25,5 +27,13 @@ export default defineConfig({
     // Vision is a tool that lets you query your content with GROQ in the studio
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({defaultApiVersion: '2024-02-12'}),
+  ],
+  tools: [
+    {
+      name: "bulk-upload",
+      title: "Bulk Upload",
+      icon: ImagesIcon,
+      component: BulkImageUploadTool,
+    },
   ],
 })
