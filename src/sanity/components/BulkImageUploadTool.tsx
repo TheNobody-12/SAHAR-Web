@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { useClient } from "sanity";
 import {
   Box,
+  Button,
   Card,
+  Flex,
   Grid,
   Heading,
   Select,
@@ -12,6 +14,7 @@ import {
   Text,
   TextInput,
 } from "@sanity/ui";
+import { slugify } from "@/sanity/lib/slugify";
 
 const CATEGORY_OPTIONS = [
   { title: "Events", value: "Events" },
@@ -21,7 +24,33 @@ const CATEGORY_OPTIONS = [
   { title: "People", value: "People" },
 ];
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+type PendingStatus = "pending" | "duplicate" | "uploading" | "done" | "error";
+
+type PendingFile = {
+  id: string;
+  file: File;
+  previewUrl: string;
+  title: string;
+  slug: string;
+  status: PendingStatus;
+  error?: string;
+};
+
 type EventOption = { _id: string; title: string };
+
+function getStatusColor(status: PendingStatus): string {
+  switch (status) {
+    case "duplicate":
+    case "error":
+      return "var(--card-critical-fg-color)";
+    case "done":
+      return "var(--card-positive-fg-color)";
+    default:
+      return "var(--card-fg-color)";
+  }
+}
 
 function useEvents() {
   const client = useClient({ apiVersion: "2024-02-05" });
@@ -46,6 +75,51 @@ export default function BulkImageUploadTool() {
   const [category, setCategory] = useState<string>("");
   const [cultureGroup, setCultureGroup] = useState<string>("");
   const [eventId, setEventId] = useState<string>("");
+  const [pending, setPending] = useState<PendingFile[]>([]);
+
+  function addFiles(fileList: FileList | null) {
+    if (!fileList) return;
+    const files = Array.from(fileList).filter((file) => {
+      if (!file.type.startsWith("image/")) return false;
+      if (file.size > MAX_FILE_SIZE) return false;
+      return true;
+    });
+
+    const newPending: PendingFile[] = files.map((file) => {
+      const title = file.name.replace(/\.[^/.]+$/, "");
+      return {
+        id: Math.random().toString(36).slice(2),
+        file,
+        previewUrl: URL.createObjectURL(file),
+        title,
+        slug: slugify(title),
+        status: "pending",
+      };
+    });
+
+    setPending((prev) => [...prev, ...newPending]);
+  }
+
+  function updateTitle(id: string, title: string) {
+    setPending((prev) =>
+      prev.map((p) =>
+        p.id === id ? { ...p, title, slug: slugify(title), status: "pending" } : p
+      )
+    );
+  }
+
+  function removeFile(id: string) {
+    setPending((prev) => {
+      const file = prev.find((p) => p.id === id);
+      if (file) URL.revokeObjectURL(file.previewUrl);
+      return prev.filter((p) => p.id !== id);
+    });
+  }
+
+  function clearAll() {
+    pending.forEach((p) => URL.revokeObjectURL(p.previewUrl));
+    setPending([]);
+  }
 
   return (
     <Box padding={4}>
@@ -106,6 +180,86 @@ export default function BulkImageUploadTool() {
             </Grid>
           </Stack>
         </Card>
+
+        <Card
+          padding={4}
+          tone="transparent"
+          style={{ border: "2px dashed #d1d5db" }}
+        >
+          <Stack space={4} style={{ alignItems: "center" }}>
+            <Text>Drag images here or click to browse</Text>
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => addFiles(e.target.files)}
+              style={{ display: "none" }}
+              id="bulk-upload-input"
+            />
+            <label htmlFor="bulk-upload-input">
+              <Button as="a" mode="ghost" text="Select images" />
+            </label>
+          </Stack>
+        </Card>
+
+        {pending.length > 0 && (
+          <Card padding={4} tone="transparent">
+            <Stack space={4}>
+              <Flex justify="space-between" align="center">
+                <Text weight="semibold">{pending.length} image(s) ready</Text>
+                <Button
+                  mode="bleed"
+                  tone="critical"
+                  text="Clear all"
+                  onClick={clearAll}
+                />
+              </Flex>
+
+              <Grid columns={[1, 1, 2]} gap={3}>
+                {pending.map((p) => (
+                  <Card key={p.id} padding={3}>
+                    <Flex gap={3} align="flex-start">
+                      <Box style={{ width: 64, height: 64, flexShrink: 0 }}>
+                        <img
+                          src={p.previewUrl}
+                          alt={p.title}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                            borderRadius: 4,
+                          }}
+                        />
+                      </Box>
+                      <Stack space={2} style={{ flex: 1 }}>
+                        <TextInput
+                          value={p.title}
+                          onChange={(e) => updateTitle(p.id, e.currentTarget.value)}
+                          label="Title"
+                        />
+                        <Text size={1} muted>Slug: {p.slug}</Text>
+                        <Text
+                          size={1}
+                          weight="semibold"
+                          style={{ color: getStatusColor(p.status) }}
+                        >
+                          {p.status.toUpperCase()}
+                          {p.error ? ` — ${p.error}` : null}
+                        </Text>
+                        <Button
+                          mode="bleed"
+                          tone="critical"
+                          text="Remove"
+                          onClick={() => removeFile(p.id)}
+                        />
+                      </Stack>
+                    </Flex>
+                  </Card>
+                ))}
+              </Grid>
+            </Stack>
+          </Card>
+        )}
       </Stack>
     </Box>
   );
