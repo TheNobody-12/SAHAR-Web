@@ -81,6 +81,54 @@ export default function BulkImageUploadTool() {
       (p) => p.status === "duplicate" || p.status === "uploading" || p.status === "error"
     );
 
+  async function handleUpload() {
+    const toUpload = pending.filter((p) => p.status === "pending");
+    if (toUpload.length === 0) return;
+
+    setPending((prev) =>
+      prev.map((p) =>
+        toUpload.some((u) => u.id === p.id) ? { ...p, status: "uploading" } : p
+      )
+    );
+
+    await Promise.all(
+      toUpload.map(async (p) => {
+        try {
+          const asset = await client.assets.upload("image", p.file);
+
+          await client.create({
+            _type: "galleryItem",
+            title: p.title,
+            slug: { _type: "slug", current: p.slug },
+            category: category || undefined,
+            cultureGroup: cultureGroup || undefined,
+            event: eventId ? { _type: "reference", _ref: eventId } : undefined,
+            image: {
+              _type: "image",
+              asset: { _type: "reference", _ref: asset._id },
+            },
+            alt: p.title,
+          });
+
+          setPending((prev) =>
+            prev.map((item) =>
+              item.id === p.id ? { ...item, status: "done" } : item
+            )
+          );
+        } catch (err) {
+          const message = err instanceof Error ? err.message : "Upload failed";
+          setPending((prev) =>
+            prev.map((item) =>
+              item.id === p.id
+                ? { ...item, status: "error", error: message }
+                : item
+            )
+          );
+        }
+      })
+    );
+  }
+
   function addFiles(fileList: FileList | null) {
     if (!fileList) return;
     const files = Array.from(fileList).filter((file) => {
@@ -256,10 +304,13 @@ export default function BulkImageUploadTool() {
                 text={`Upload ${pending.length} image(s)`}
                 tone="primary"
                 disabled={!canUpload}
-                onClick={() => {
-                  // upload logic in next task
-                }}
+                onClick={handleUpload}
               />
+
+              <Text size={1} muted>
+                Done: {pending.filter((p) => p.status === "done").length} /{" "}
+                {pending.length}
+              </Text>
 
               <Grid columns={[1, 1, 2]} gap={3}>
                 {pending.map((p) => (
