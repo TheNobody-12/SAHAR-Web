@@ -61,10 +61,7 @@ function useEvents() {
     client
       .fetch<EventOption[]>(`*[_type == "event"] | order(date desc) { _id, title }`)
       .then(setEvents)
-      .catch((err) => {
-        console.error("Failed to load events", err);
-        setError("Could not load events. Please try again.");
-      });
+      .catch(() => setError("Could not load events. Please try again."));
   }, [client]);
 
   return { events, error };
@@ -76,6 +73,13 @@ export default function BulkImageUploadTool() {
   const [cultureGroup, setCultureGroup] = useState<string>("");
   const [eventId, setEventId] = useState<string>("");
   const [pending, setPending] = useState<PendingFile[]>([]);
+  const client = useClient({ apiVersion: "2024-02-05" });
+
+  const canUpload =
+    pending.length > 0 &&
+    !pending.some(
+      (p) => p.status === "duplicate" || p.status === "uploading" || p.status === "error"
+    );
 
   function addFiles(fileList: FileList | null) {
     if (!fileList) return;
@@ -120,6 +124,39 @@ export default function BulkImageUploadTool() {
     pending.forEach((p) => URL.revokeObjectURL(p.previewUrl));
     setPending([]);
   }
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function checkDuplicates() {
+      const slugs = pending.map((p) => p.slug);
+      if (slugs.length === 0) return;
+
+      const existingSlugs = await client.fetch<string[]>(
+        `*[_type == "galleryItem" && slug.current in $slugs].slug.current`,
+        { slugs }
+      );
+
+      if (cancelled) return;
+
+      const existing = new Set(existingSlugs);
+
+      setPending((prev) =>
+        prev.map((p) => {
+          if (p.status === "uploading" || p.status === "done") return p;
+          if (existing.has(p.slug)) {
+            return { ...p, status: "duplicate", error: "Slug already exists" };
+          }
+          return { ...p, status: "pending", error: undefined };
+        })
+      );
+    }
+
+    checkDuplicates();
+    return () => {
+      cancelled = true;
+    };
+  }, [pending.map((p) => p.slug).join(","), client]);
 
   return (
     <Box padding={4}>
@@ -214,6 +251,15 @@ export default function BulkImageUploadTool() {
                   onClick={clearAll}
                 />
               </Flex>
+
+              <Button
+                text={`Upload ${pending.length} image(s)`}
+                tone="primary"
+                disabled={!canUpload}
+                onClick={() => {
+                  // upload logic in next task
+                }}
+              />
 
               <Grid columns={[1, 1, 2]} gap={3}>
                 {pending.map((p) => (
