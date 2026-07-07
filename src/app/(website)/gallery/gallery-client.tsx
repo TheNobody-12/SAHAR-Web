@@ -88,31 +88,35 @@ export function GalleryClient({ items }: Props) {
   }, [next, prev, openIndex]);
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="border-b">
-        <div className="max-w-7xl mx-auto px-4 py-10">
-          <h1 className="text-3xl md:text-4xl font-extrabold">Gallery</h1>
-          <p className="text-gray-600 mt-2">Moments from our programs, festivals, and community life.</p>
+    <main className="min-h-screen bg-[var(--warm-ivory)]">
+      <section className="border-b border-stone-200">
+        <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+          <p className="text-sm uppercase tracking-[0.2em] text-rose-700 mb-3">Moments & Memories</p>
+          <h1 className="text-4xl md:text-5xl font-[family-name:var(--font-playfair)] font-bold text-stone-900">
+            Gallery
+          </h1>
+          <p className="text-stone-600 mt-4 max-w-xl mx-auto">
+            A visual journey through our programs, festivals, and community life.
+          </p>
         </div>
       </section>
 
       {/* Filters */}
-      <section className="bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-          <div className="md:col-span-1">
-            <label className="text-sm font-medium" htmlFor="gallery-search">Search</label>
+      <section className="bg-white/60 backdrop-blur-sm border-b border-stone-200 sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-5 grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+          <div className="md:col-span-2">
             <Input
-              id="gallery-search"
-              placeholder="Search (e.g., dance)"
+              placeholder="Search gallery..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              className="bg-white border-stone-200 focus-visible:ring-rose-700"
             />
           </div>
           <div>
-            <label className="text-sm font-medium" htmlFor="gallery-category">Category</label>
+            <label className="text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5 block" htmlFor="gallery-category">Category</label>
             <select
               id="gallery-category"
-              className="mt-1 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+              className="w-full h-10 rounded-md border border-stone-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-700"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
             >
@@ -123,10 +127,10 @@ export function GalleryClient({ items }: Props) {
           </div>
           {cultureGroups.length > 1 && (
             <div>
-              <label className="text-sm font-medium" htmlFor="gallery-culture">Culture</label>
+              <label className="text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5 block" htmlFor="gallery-culture">Culture</label>
               <select
                 id="gallery-culture"
-                className="mt-1 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                className="w-full h-10 rounded-md border border-stone-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-700"
                 value={cultureGroup}
                 onChange={(e) => setCultureGroup(e.target.value)}
               >
@@ -138,10 +142,10 @@ export function GalleryClient({ items }: Props) {
           )}
           {eventNames.length > 1 && (
             <div>
-              <label className="text-sm font-medium" htmlFor="gallery-event">Event</label>
+              <label className="text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5 block" htmlFor="gallery-event">Event</label>
               <select
                 id="gallery-event"
-                className="mt-1 w-full h-10 rounded-md border border-input bg-background px-3 text-sm"
+                className="w-full h-10 rounded-md border border-stone-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-700"
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
               >
@@ -155,36 +159,33 @@ export function GalleryClient({ items }: Props) {
       </section>
 
       {/* Grid */}
-      <section className="py-10">
+      <section className="py-16">
         <div className="max-w-7xl mx-auto px-4">
           {filtered.length === 0 ? (
-            <div className="py-20 text-center text-gray-600">No images match your filters.</div>
+            <div className="py-24 text-center text-stone-500">
+              <p className="text-lg">No moments match your filters.</p>
+            </div>
           ) : (
-            <ul className="columns-2 sm:columns-3 lg:columns-4 gap-4 space-y-4">
+            <ul className="columns-2 sm:columns-3 lg:columns-4 gap-5 space-y-5">
               {filtered.map((img, i) => (
                 <li key={img._id} className="group relative break-inside-avoid">
                   <button
-                    className="block w-full overflow-hidden rounded-xl ring-1 ring-black/5 focus:outline-none focus:ring-2 focus:ring-primary relative"
+                    className="block w-full overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-stone-900/5 transition-all duration-500 ease-out hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-rose-700"
                     onClick={() => setOpenIndex(i)}
-                    aria-label={`View larger: ${img.alt || img.title}`}
+                    aria-label={`View: ${img.alt || img.title}`}
                   >
-                    <MasonryImg src={img.image?.url || "/images/placeholder-event.svg"} alt={img.alt || img.title || "Gallery image"} />
-                    {img.mediaType && img.mediaType !== "image" && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
-                        <div className="bg-white/90 rounded-full p-3 shadow-lg flex items-center justify-center">
-                          <Play className="w-6 h-6 text-black ml-1" />
+                    <div className="relative">
+                      <MasonryImg src={img.image?.url || "/images/placeholder-event.svg"} alt={img.alt || img.title || "Gallery image"} />
+                      {img.mediaType && img.mediaType !== "image" && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-90 transition-opacity group-hover:bg-black/30">
+                          <div className="bg-rose-700 text-white rounded-full p-3 shadow-lg flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
+                            <Play className="w-5 h-5 ml-0.5" fill="currentColor" />
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" aria-hidden />
+                    </div>
                   </button>
-                  <div className="mt-2 text-sm text-gray-700 line-clamp-2" aria-hidden>
-                    <span className="font-medium">{img.title}</span>
-                    {(img.cultureGroup || img.eventName) && (
-                      <span className="text-gray-500 block text-xs mt-0.5">
-                        {[img.cultureGroup, img.eventName].filter(Boolean).join(" • ")}
-                      </span>
-                    )}
-                  </div>
                 </li>
               ))}
             </ul>
@@ -199,19 +200,19 @@ export function GalleryClient({ items }: Props) {
         onClick={(e) => {
           if (e.target === dialogRef.current) setOpenIndex(null);
         }}
-        className="m-auto bg-transparent p-4 backdrop:bg-black/80 max-w-5xl w-full"
+        className="m-auto bg-transparent p-4 backdrop:bg-black/85 max-w-5xl w-full"
       >
         {openIndex !== null && filtered[openIndex] && (
           <div className="relative w-full">
             <form method="dialog">
               <button
                 aria-label="Close"
-                className="absolute top-3 right-3 z-10 grid place-items-center h-10 w-10 rounded-full bg-black/60 text-white hover:bg-black/80"
+                className="absolute top-3 right-3 z-10 grid place-items-center h-10 w-10 rounded-full bg-black/60 text-white hover:bg-black/80 transition-colors"
               >
                 <X className="h-5 w-5" />
               </button>
             </form>
-            <div className="relative w-full aspect-[16/10] bg-gray-900 rounded-2xl overflow-hidden flex items-center justify-center shadow-2xl">
+            <div className="relative w-full aspect-[16/10] bg-stone-900 rounded-2xl overflow-hidden flex items-center justify-center shadow-2xl">
               {filtered[openIndex].mediaType === "video_url" && filtered[openIndex].videoUrl ? (
                 <iframe
                   src={getEmbedUrl(filtered[openIndex].videoUrl!)}
@@ -238,10 +239,17 @@ export function GalleryClient({ items }: Props) {
                 />
               )}
             </div>
-            <div className="mt-4 flex items-center justify-between text-white/90">
-              <p className="text-sm md:text-base font-medium drop-shadow-md">
-                {filtered[openIndex].title}
-              </p>
+            <div className="mt-5 flex items-center justify-between text-white/90">
+              <div>
+                <p className="text-base md:text-lg font-medium">
+                  {filtered[openIndex].title}
+                </p>
+                {(filtered[openIndex].cultureGroup || filtered[openIndex].eventName) && (
+                  <p className="text-sm text-white/60 mt-1">
+                    {[filtered[openIndex].cultureGroup, filtered[openIndex].eventName].filter(Boolean).join(" • ")}
+                  </p>
+                )}
+              </div>
               <div className="flex gap-2">
                 <Button variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20" onClick={prev} aria-label="Previous image">
                   <ChevronLeft className="h-4 w-4" />
@@ -262,7 +270,7 @@ function MasonryImg({ src, alt }: { src: string; alt: string }) {
   const [ok, setOk] = useState(true);
   if (!ok) {
     return (
-      <div className="relative w-full aspect-[4/3] bg-gray-100">
+      <div className="relative w-full aspect-[4/3] bg-stone-100">
         <Image
           src="/images/placeholder-event.svg"
           alt={`${alt} placeholder`}
@@ -278,7 +286,7 @@ function MasonryImg({ src, alt }: { src: string; alt: string }) {
       alt={alt}
       width={600}
       height={400}
-      className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105 bg-gray-100"
+      className="w-full h-auto object-cover transition-transform duration-700 ease-out group-hover:scale-105 bg-stone-100"
       onError={() => setOk(false)}
       sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
     />
