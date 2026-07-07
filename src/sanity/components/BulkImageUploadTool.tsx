@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useClient } from "sanity";
 import {
   Box,
@@ -25,6 +25,7 @@ const CATEGORY_OPTIONS = [
 ];
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_BATCH_SIZE = 50;
 
 type PendingStatus = "pending" | "duplicate" | "uploading" | "done" | "error";
 
@@ -64,16 +65,18 @@ function useEvents() {
       .catch(() => setError("Could not load events. Please try again."));
   }, [client]);
 
-  return { events, error };
+  return { client, events, error };
 }
 
 export default function BulkImageUploadTool() {
-  const { events, error: eventsError } = useEvents();
+  const { client, events, error: eventsError } = useEvents();
   const [category, setCategory] = useState<string>("");
   const [cultureGroup, setCultureGroup] = useState<string>("");
   const [eventId, setEventId] = useState<string>("");
   const [pending, setPending] = useState<PendingFile[]>([]);
-  const client = useClient({ apiVersion: "2024-02-05" });
+  const [rejectedMessage, setRejectedMessage] = useState<string>("");
+  const [isDragging, setIsDragging] = useState(false);
+  const previewUrlsRef = useRef<Set<string>>(new Set());
 
   const canUpload =
     pending.length > 0 &&
@@ -81,9 +84,14 @@ export default function BulkImageUploadTool() {
       (p) => p.status === "duplicate" || p.status === "uploading" || p.status === "error"
     );
 
+  const isUploadingRef = useRef(false);
+
   async function handleUpload() {
+    if (isUploadingRef.current) return;
     const toUpload = pending.filter((p) => p.status === "pending");
     if (toUpload.length === 0) return;
+
+    isUploadingRef.current = true;
 
     setPending((prev) =>
       prev.map((p) =>
@@ -102,12 +110,12 @@ export default function BulkImageUploadTool() {
             slug: { _type: "slug", current: p.slug },
             category: category || undefined,
             cultureGroup: cultureGroup || undefined,
-            event: eventId ? { _type: "reference", _ref: eventId } : undefined,
+            event: eventId ? { _type: "reference", _ref: eventId, _weak: true } : undefined,
             image: {
               _type: "image",
               asset: { _type: "reference", _ref: asset._id },
+              alt: p.title,
             },
-            alt: p.title,
           });
 
           setPending((prev) =>
@@ -127,22 +135,56 @@ export default function BulkImageUploadTool() {
         }
       })
     );
+
+    isUploadingRef.current = false;
   }
 
   function addFiles(fileList: FileList | null) {
     if (!fileList) return;
-    const files = Array.from(fileList).filter((file) => {
-      if (!file.type.startsWith("image/")) return false;
-      if (file.size > MAX_FILE_SIZE) return false;
-      return true;
+    const files = Array.from(fileList);
+    const accepted: File[] = [];
+    const rejected: { name: string; reason: string }[] = [];
+    const availableSlots = Math.max(0, MAX_BATCH_SIZE - pending.length);
+
+    files.forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        rejected.push({ name: file.name, reason: "not an image" });
+        return;
+      }
+      if (file.size > MAX_FILE_SIZE) {
+        rejected.push({ name: file.name, reason: "larger than 10 MB" });
+        return;
+      }
+      if (accepted.length >= availableSlots) {
+        rejected.push({ name: file.name, reason: "batch limit reached" });
+        return;
+      }
+      accepted.push(file);
     });
 
-    const newPending: PendingFile[] = files.map((file) => {
+    if (rejected.length > 0) {
+      const nonImage = rejected.filter((r) => r.reason === "not an image").length;
+      const tooLarge = rejected.filter((r) => r.reason === "larger than 10 MB").length;
+      const overLimit = rejected.filter((r) => r.reason === "batch limit reached").length;
+      const parts: string[] = [];
+      if (nonImage > 0) parts.push(`${nonImage} not an image`);
+      if (tooLarge > 0) parts.push(`${tooLarge} over 10 MB`);
+      if (overLimit > 0) parts.push(`${overLimit} over batch limit`);
+      setRejectedMessage(`Rejected ${rejected.length} file(s): ${parts.join(", ")}.`);
+    } else {
+      setRejectedMessage("");
+    }
+
+    if (accepted.length === 0) return;
+
+    const newPending: PendingFile[] = accepted.map((file) => {
       const title = file.name.replace(/\.[^/.]+$/, "");
+      const previewUrl = URL.createObjectURL(file);
+      previewUrlsRef.current.add(previewUrl);
       return {
         id: Math.random().toString(36).slice(2),
         file,
-        previewUrl: URL.createObjectURL(file),
+        previewUrl,
         title,
         slug: slugify(title),
         status: "pending",
@@ -163,15 +205,46 @@ export default function BulkImageUploadTool() {
   function removeFile(id: string) {
     setPending((prev) => {
       const file = prev.find((p) => p.id === id);
-      if (file) URL.revokeObjectURL(file.previewUrl);
+      if (file) {
+        URL.revokeObjectURL(file.previewUrl);
+        previewUrlsRef.current.delete(file.previewUrl);
+      }
       return prev.filter((p) => p.id !== id);
     });
   }
 
   function clearAll() {
-    pending.forEach((p) => URL.revokeObjectURL(p.previewUrl));
+    pending.forEach((p) => {
+      URL.revokeObjectURL(p.previewUrl);
+      previewUrlsRef.current.delete(p.previewUrl);
+    });
     setPending([]);
+    setRejectedMessage("");
   }
+
+  function handleDragOver(e: React.DragEvent) {
+    e.preventDefault();
+    setIsDragging(true);
+  }
+
+  function handleDragLeave(e: React.DragEvent) {
+    e.preventDefault();
+    setIsDragging(false);
+  }
+
+  function handleDrop(e: React.DragEvent) {
+    e.preventDefault();
+    setIsDragging(false);
+    addFiles(e.dataTransfer.files);
+  }
+
+  useEffect(() => {
+    const urls = previewUrlsRef.current;
+    return () => {
+      urls.forEach((url) => URL.revokeObjectURL(url));
+      urls.clear();
+    };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -180,21 +253,32 @@ export default function BulkImageUploadTool() {
       const slugs = pending.map((p) => p.slug);
       if (slugs.length === 0) return;
 
-      const existingSlugs = await client.fetch<string[]>(
-        `*[_type == "galleryItem" && slug.current in $slugs].slug.current`,
-        { slugs }
-      );
+      let existing = new Set<string>();
+      try {
+        const existingSlugs = await client.fetch<string[]>(
+          `*[_type == "galleryItem" && slug.current in $slugs].slug.current`,
+          { slugs }
+        );
+        if (cancelled) return;
+        existing = new Set(existingSlugs);
+      } catch {
+        // Leave existing empty; network errors should not block the editor.
+        // The upload path will surface actual write failures.
+      }
 
-      if (cancelled) return;
-
-      const existing = new Set(existingSlugs);
+      const slugCounts = new Map<string, number>();
+      pending.forEach((p) => {
+        slugCounts.set(p.slug, (slugCounts.get(p.slug) || 0) + 1);
+      });
 
       setPending((prev) =>
         prev.map((p) => {
           if (p.status === "uploading" || p.status === "done") return p;
-          if (existing.has(p.slug)) {
+          const isDuplicate = existing.has(p.slug) || (slugCounts.get(p.slug) || 0) > 1;
+          if (isDuplicate) {
             return { ...p, status: "duplicate", error: "Slug already exists" };
           }
+          if (p.status === "error") return p;
           return { ...p, status: "pending", error: undefined };
         })
       );
@@ -204,6 +288,8 @@ export default function BulkImageUploadTool() {
     return () => {
       cancelled = true;
     };
+    // Derived slug list is intentionally used to trigger duplicate checks only when slugs change.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pending.map((p) => p.slug).join(","), client]);
 
   return (
@@ -269,7 +355,12 @@ export default function BulkImageUploadTool() {
         <Card
           padding={4}
           tone="transparent"
-          style={{ border: "2px dashed #d1d5db" }}
+          style={{
+            border: `2px dashed ${isDragging ? "var(--card-focus-ring-color)" : "#d1d5db"}`,
+          }}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
         >
           <Stack space={4} style={{ alignItems: "center" }}>
             <Text>Drag images here or click to browse</Text>
@@ -286,6 +377,12 @@ export default function BulkImageUploadTool() {
             </label>
           </Stack>
         </Card>
+
+        {rejectedMessage && (
+          <Card padding={3} tone="critical">
+            <Text size={1}>{rejectedMessage}</Text>
+          </Card>
+        )}
 
         {pending.length > 0 && (
           <Card padding={4} tone="transparent">
