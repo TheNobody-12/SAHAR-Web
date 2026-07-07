@@ -103,8 +103,8 @@ export function GalleryClient({ items }: Props) {
 
       {/* Filters */}
       <section className="bg-white/60 backdrop-blur-sm border-b border-stone-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-5 grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-          <div className="md:col-span-2">
+        <div className="max-w-7xl mx-auto px-4 py-3 md:py-5 flex flex-nowrap md:grid md:grid-cols-5 gap-3 md:gap-4 overflow-x-auto md:overflow-visible items-end">
+          <div className="w-full md:col-span-2 min-w-[140px]">
             <Input
               placeholder="Search gallery..."
               value={query}
@@ -112,10 +112,11 @@ export function GalleryClient({ items }: Props) {
               className="bg-white border-stone-200 focus-visible:ring-rose-700"
             />
           </div>
-          <div>
-            <label className="text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5 block" htmlFor="gallery-category">Category</label>
+          <div className="min-w-[120px]">
+            <label className="hidden md:block text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5" htmlFor="gallery-category">Category</label>
             <select
               id="gallery-category"
+              aria-label="Category"
               className="w-full h-10 rounded-md border border-stone-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-700"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -126,10 +127,11 @@ export function GalleryClient({ items }: Props) {
             </select>
           </div>
           {cultureGroups.length > 1 && (
-            <div>
-              <label className="text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5 block" htmlFor="gallery-culture">Culture</label>
+            <div className="min-w-[120px]">
+              <label className="hidden md:block text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5" htmlFor="gallery-culture">Culture</label>
               <select
                 id="gallery-culture"
+                aria-label="Culture"
                 className="w-full h-10 rounded-md border border-stone-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-700"
                 value={cultureGroup}
                 onChange={(e) => setCultureGroup(e.target.value)}
@@ -141,10 +143,11 @@ export function GalleryClient({ items }: Props) {
             </div>
           )}
           {eventNames.length > 1 && (
-            <div>
-              <label className="text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5 block" htmlFor="gallery-event">Event</label>
+            <div className="min-w-[120px]">
+              <label className="hidden md:block text-xs font-medium uppercase tracking-wider text-stone-500 mb-1.5" htmlFor="gallery-event">Event</label>
               <select
                 id="gallery-event"
+                aria-label="Event"
                 className="w-full h-10 rounded-md border border-stone-200 bg-white px-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-700"
                 value={eventName}
                 onChange={(e) => setEventName(e.target.value)}
