@@ -24,7 +24,7 @@ const CATEGORY_OPTIONS = [
   { title: "People", value: "People" },
 ];
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024;
+const MAX_FILE_SIZE = 30 * 1024 * 1024;
 const MAX_BATCH_SIZE = 50;
 
 type PendingStatus = "pending" | "duplicate" | "uploading" | "done" | "error";
@@ -152,7 +152,7 @@ export default function BulkImageUploadTool() {
         return;
       }
       if (file.size > MAX_FILE_SIZE) {
-        rejected.push({ name: file.name, reason: "larger than 10 MB" });
+        rejected.push({ name: file.name, reason: "larger than 30 MB" });
         return;
       }
       if (accepted.length >= availableSlots) {
@@ -164,7 +164,7 @@ export default function BulkImageUploadTool() {
 
     if (rejected.length > 0) {
       const nonImage = rejected.filter((r) => r.reason === "not an image").length;
-      const tooLarge = rejected.filter((r) => r.reason === "larger than 10 MB").length;
+      const tooLarge = rejected.filter((r) => r.reason === "larger than 30 MB").length;
       const overLimit = rejected.filter((r) => r.reason === "batch limit reached").length;
       const parts: string[] = [];
       if (nonImage > 0) parts.push(`${nonImage} not an image`);
