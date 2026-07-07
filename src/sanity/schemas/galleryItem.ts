@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import YouTubeUrlInput from "@/sanity/components/YouTubeUrlInput";
 
 export default defineType({
   name: "galleryItem",
@@ -56,6 +57,9 @@ export default defineType({
       type: "url",
       description: "YouTube or Vimeo URL",
       hidden: ({ document }) => document?.mediaType !== "video_url",
+      components: {
+        input: YouTubeUrlInput,
+      },
     }),
     defineField({
       name: "videoFile",
